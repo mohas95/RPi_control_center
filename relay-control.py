@@ -10,6 +10,7 @@ from relay_states import Relay
 
 #################### global variable
 relay_config_file = './relay_config.json'
+relay_status_api_file = './relay_status.json'
 
 refresh_rate = 1
 

@@ -2,6 +2,7 @@ import os.path
 import json
 import threading
 import time
+import datetime
 import RPi.GPIO as GPIO
 
 
@@ -21,6 +22,7 @@ class Relay():
         self.pin = pin
         self.state = state
         self.thread = self.start()
+        self.api_file = './api/relay'+self.id +'_'+self.pin'.json'
 
     @property
     def id(self):
@@ -69,6 +71,37 @@ class Relay():
         '''
         '''
         self._state = value
+
+    @property
+    def api_file(self):
+        '''
+        '''
+        return self._api_file
+
+    @api_file.setter
+    def api_file(self, value):
+        '''
+        '''
+
+        self._api_file = value
+
+    def update_api_file(self):
+
+        self.api_file = './api/relay'+self.id +'_'+self.pin'.json'
+
+    def push_to_api(self, value = None):
+        if value:
+            self.api_file = value
+        else:
+            self.update_api_file()
+
+        timestamp = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+        data = {"relay_id":self.id, "name":self.name,"pin":self.pin, "status":self.state, "last updated":timestamp}
+
+        with open(self.api_file, "w") as f:
+            f.write(json.dumps(data, indent=4))
+
+
 
     @threaded
     def start(self):
@@ -151,6 +184,8 @@ def load_relay_objects(relay_config):
     return relay_objects
 
 
+
+
 def update_relay_states(dict_of_relays, relay_config_file):
     relay_config= load_relay_config(relay_config_file)
 
@@ -175,6 +210,8 @@ def update_relay_states(dict_of_relays, relay_config_file):
             relay.thread = relay.start()
         else:
             pass
+
+
         # print(relay.thread)
 
 def print_all_relays(dict_of_relays):
