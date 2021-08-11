@@ -211,7 +211,7 @@ def update_relay_states(dict_of_relays, relay_config_file):
         else:
             pass
 
-
+        relay.push_to_api()
         # print(relay.thread)
 
 def print_all_relays(dict_of_relays):
