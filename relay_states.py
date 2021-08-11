@@ -22,8 +22,6 @@ class Relay():
         self.state = state
         self.thread = self.start()
 
-
-
     @property
     def id(self):
         '''
@@ -98,12 +96,12 @@ class Relay():
 
 ########################################## Module functions
 
-# def begin():
-#     GPIO.setwarnings(False)
-#     GPIO.setmode(GPIO.BCM)
-#
-# def stop():
-#     GPIO.cleanup()
+def begin():
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+
+def stop():
+    GPIO.cleanup()
 
 def load_relay_config(config_json_file):
     '''
