@@ -76,22 +76,10 @@ class Relay():
 
             print(self.name)
             time.sleep(4)
-
+            #
             # GPIO.setup(self.pin, GPIO.OUT)
             #
-            #
-            #
-            #
-            #
             # GPIO.output(ph_down, GPIO.LOW)
-    # @threaded
-    # def check_thread(self):
-    #     while True:
-    #         # print(self.thread)
-    #         if self.thread.is_alive():
-    #             self.thread=self.start()
-    #         time.sleep(1)
-
 
 
 ########################################## Module functions
