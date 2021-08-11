@@ -1,13 +1,26 @@
 import os.path
 import json
 import threading
+import time
+# import import RPi.GPIO as GPIO
+
+
+def threaded(func):
+    def wrapper(*args, **kwargs):
+
+        thread = threading.Thread(target=func, args=args, kwargs=kwargs, daemon=True)
+        thread.start()
+
+        return thread
+    return wrapper
 
 class Relay():
-    def __init__(self, id, name, pin):
+    def __init__(self, id, name, pin, state=False):
         self.id = id
         self.name = name
         self.pin = pin
-        self.state = False
+        self.state = state
+        self.thread = self.start()
 
     @property
     def id(self):
@@ -57,18 +70,47 @@ class Relay():
         '''
         self._state = value
 
+    @threaded
+    def start(self):
+        while self.state:
+
+            print(self.name)
+            time.sleep(4)
+
+            # GPIO.setup(self.pin, GPIO.OUT)
+            #
+            #
+            #
+            #
+            #
+            # GPIO.output(ph_down, GPIO.LOW)
+    # @threaded
+    # def check_thread(self):
+    #     while True:
+    #         # print(self.thread)
+    #         if self.thread.is_alive():
+    #             self.thread=self.start()
+    #         time.sleep(1)
 
 
 
 ########################################## Module functions
+
+# def begin():
+#     GPIO.setwarnings(False)
+#     GPIO.setmode(GPIO.BCM)
+#
+# def stop():
+#     GPIO.cleanup()
+
 def load_relay_config(config_json_file):
     '''
     return results: dictionary
     '''
     default_relay_config = {
-        "1":{'name':'name1', 'pin':26, 'state':None},
-        "2":{'name':'name2', 'pin':20, 'state':None},
-        "3":{'name':'name3', 'pin':21, 'state':None},
+        "1":{'name':'name1', 'pin':26, 'state':False},
+        "2":{'name':'name2', 'pin':20, 'state':False},
+        "3":{'name':'name3', 'pin':21, 'state':False},
     }
 
     if os.path.isfile(config_json_file):
@@ -90,7 +132,7 @@ def load_relay_objects(relay_config):
 
     for relay_id, relay_properties in relay_config.items():
 
-        relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'])
+        relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'])
 
         relay_objects[relay_id] = relay
 
@@ -108,16 +150,21 @@ def update_relay_states(dict_of_relays, relay_config_file):
             pass
 
         if relay_config[relay_id]['pin'] != relay.pin:
-            relay.name = relay_config[relay_id]['name']
+            relay.pin = relay_config[relay_id]['pin']
         else:
             pass
 
         if relay_config[relay_id]['state'] != relay.state:
-            relay.name = relay_config[relay_id]['name']
+            relay.state = relay_config[relay_id]['state']
         else:
             pass
 
-def print_all_relays(dict_of_relays):
+        if not relay.thread.is_alive():
+            relay.thread = relay.start()
+        else:
+            pass
+        # print(relay.thread)
 
+def print_all_relays(dict_of_relays):
     for relay_id, relay in dict_of_relays.items():
         print(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')

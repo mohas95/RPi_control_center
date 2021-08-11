@@ -13,6 +13,7 @@ from relay_states import Relay
 #################### global variable
 relay_config_file = './relay_config.json'
 
+refresh_rate = 1
 
 if __name__ == '__main__':
 
@@ -20,11 +21,7 @@ if __name__ == '__main__':
 
     relays= rs.load_relay_objects(relay_config)
 
-    # print(relays['1'].name)
-    # relays['1'].name = 'air_pump'
-    # print(relays['1'].name)
-
     while True:
         rs.update_relay_states(dict_of_relays = relays, relay_config_file=relay_config_file)
         rs.print_all_relays(relays)
-        time.sleep(5)
+        time.sleep(refresh_rate)
