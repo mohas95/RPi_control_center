@@ -86,7 +86,7 @@ class Relay():
                 #     print('error')
                 #     exit()
             while self.state:
-                if GPIO.input:
+                if GPIO.input(pin):
                     GPIO.output(pin, GPIO.LOW)
                 else:
                     pass
