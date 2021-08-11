@@ -22,6 +22,8 @@ class Relay():
         self.state = state
         self.thread = self.start()
 
+
+
     @property
     def id(self):
         '''
@@ -72,14 +74,25 @@ class Relay():
 
     @threaded
     def start(self):
+        success = False
         while self.state:
+            while self.state and not success:
+                try:
+                    pin = self.pin
+                    GPIO.setup(pin, GPIO.OUT)
+                    GPIO.output(pin, GPIO.HIGH)
+                    print('GPIO sucessfull initialized')
 
-            print(self.name)
-            time.sleep(4)
-            #
-            # GPIO.setup(self.pin, GPIO.OUT)
-            #
-            # GPIO.output(ph_down, GPIO.LOW)
+                    success = True
+                except:
+                    exit()
+            while self.state:
+                if GPIO.input:
+                    GPIO.output(pin, GPIO.LOW)
+                else:
+                    pass
+
+            GPIO.output(pin, GPIO.HIGH)
 
 
 ########################################## Module functions
