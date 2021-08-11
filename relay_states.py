@@ -7,9 +7,9 @@ def load_relay_config(config_json_file):
     return results: dictionary
     '''
     default_relay_config = {
-        1:{'name':None, 'pin':26, 'state':None},
-        2:{'name':None, 'pin':20, 'state':None},
-        3:{'name':None, 'pin':21, 'state':None},
+        "1":{'name':'name1', 'pin':26, 'state':None},
+        "2":{'name':'name2', 'pin':20, 'state':None},
+        "3":{'name':'name3', 'pin':21, 'state':None},
     }
 
     if os.path.isfile(config_json_file):
@@ -33,7 +33,7 @@ def load_relay_objects(relay_config):
 
         relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'])
 
-        relay_objects[relay_properties['name']] = relay
+        relay_objects[relay_id] = relay
 
     return relay_objects
 
