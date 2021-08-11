@@ -75,7 +75,6 @@ class Relay():
     @threaded
     def start(self):
         success = False
-        print(self.state)
         while self.state:
             while self.state and not success:
                 try:
