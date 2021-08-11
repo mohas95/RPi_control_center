@@ -75,24 +75,35 @@ class Relay():
         success = False
         while self.state:
             while self.state and not success:
-                # try:
-                pin = self.pin
-                GPIO.setup(pin, GPIO.OUT)
-                GPIO.output(pin, GPIO.HIGH)
-                print('GPIO sucessfull initialized')
+                try:
+                    pin = self.pin
+                    GPIO.setup(pin, GPIO.OUT)
+                    GPIO.output(pin, GPIO.HIGH)
+                    print(f'[{self.id}:{self.name}]GPIO {pin} sucessfull initialized')
 
                 success = True
-                # except:
-                #     print('error')
-                #     exit()
-            while self.state:
-                if GPIO.input(pin):
-                    print('GPIO hit')
-                    GPIO.output(pin, GPIO.LOW)
-                else:
-                    pass
+                except:
+                    print(f'[{self.id}:{self.name}]GPIO {pin} failed to initialize')
+                    exit()
+            try:
+                while self.state:
+                    if GPIO.input(pin):
+                        GPIO.output(pin, GPIO.LOW)
+                        print(f'[{self.id}:{self.name}]GPIO {pin} Switch ON')
+
+                    else:
+                        pass
+            except:
+                GPIO.output(pin, GPIO.HIGH)
+                GPIO.cleanup(pin)
+
+                print(f'[{self.id}:{self.name}]GPIO {pin} Error with the process, switching OFF and cleaning pin')
+                exit()
+
 
             GPIO.output(pin, GPIO.HIGH)
+            GPIO.cleanup(pin)
+            print(f'[{self.id}:{self.name}]GPIO {pin} Switch OFF')
 
 
 ########################################## Module functions
