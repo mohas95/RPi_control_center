@@ -22,7 +22,7 @@ class Relay():
         self.pin = pin
         self.state = state
         self.thread = self.start()
-        self.api_file = './api/relay'+self.id +'_'+self.pin'.json'
+        self.api_file = './api/relay'+self.id +'_'+self.pin+'.json'
 
     @property
     def id(self):
@@ -87,7 +87,7 @@ class Relay():
 
     def update_api_file(self):
 
-        self.api_file = './api/relay'+self.id +'_'+self.pin'.json'
+        self.api_file = './api/relay'+self.id +'_'+self.pin+ '.json'
 
     def push_to_api(self, value = None):
         if value:
