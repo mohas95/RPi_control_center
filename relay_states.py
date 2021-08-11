@@ -87,6 +87,7 @@ class Relay():
                 #     exit()
             while self.state:
                 if GPIO.input(pin):
+                    print('GPIO hit')
                     GPIO.output(pin, GPIO.LOW)
                 else:
                     pass
