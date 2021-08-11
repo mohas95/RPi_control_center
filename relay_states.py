@@ -2,7 +2,7 @@ import os.path
 import json
 import threading
 import time
-# import import RPi.GPIO as GPIO
+import import RPi.GPIO as GPIO
 
 
 def threaded(func):
