@@ -74,17 +74,17 @@ class Relay():
     def start(self):
         success = False
         while self.state:
-            while self.state and not success:
-                try:
+            try:
+                while self.state and not success:
                     pin = self.pin
                     GPIO.setup(pin, GPIO.OUT)
                     GPIO.output(pin, GPIO.HIGH)
                     print(f'[{self.id}:{self.name}]GPIO {pin} sucessfull initialized')
 
-                success = True
-                except:
-                    print(f'[{self.id}:{self.name}]GPIO {pin} failed to initialize')
-                    exit()
+                    success = True
+            except:
+                print(f'[{self.id}:{self.name}]GPIO {pin} failed to initialize')
+                exit()
             try:
                 while self.state:
                     if GPIO.input(pin):
