@@ -25,4 +25,5 @@ if __name__ == '__main__':
             rs.print_all_relays(relays)
             time.sleep(refresh_rate)
     except:
+        print('\nDone!')
         rs.stop()
