@@ -24,14 +24,15 @@ def threaded(func):
     return wrapper
 
 class Relay():
-    def __init__(self, id, name, pin, state=False, log_file = './logs/process.log'):
+    def __init__(self, id, name, pin, state=False, refresh_rate = 1, log_file = './logs/process.log'):
         self.id = id
         self.name = name
         self.pin = pin
         self.state = state
-        self.thread = self.start()
+        self.refresh_rate = refresh_rate
         self.api_file = './api/relay'+self.id +'_'+str(self.pin)+'.json'
         self.logger = setup_logger(name=__name__, logfile=log_file, level=10, formatter = formatter)
+        self.thread = self.start()
 
     @property
     def id(self):
@@ -82,6 +83,18 @@ class Relay():
         self._state = value
 
     @property
+    def refresh_rate(self):
+        '''
+        '''
+        return self._refresh_rate
+
+    @refresh_rate.setter
+    def refresh_rate(self, value):
+        '''
+        '''
+        self._refresh_rate = value
+
+    @property
     def api_file(self):
         '''
         '''
@@ -103,7 +116,6 @@ class Relay():
     def api_file(self, value):
         '''
         '''
-
         self._api_file = value
 
     def push_to_api(self, value = None):
