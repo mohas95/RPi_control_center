@@ -18,7 +18,7 @@ if __name__ == '__main__':
             print('test')
             time.sleep(5)
 
-    except():
+    except KeyboardInterrupt():
         rs.stop()
         print('main done!')
 
