@@ -6,7 +6,6 @@ from relay_states import Relay
 
 #################### global variable
 relay_config_file = './relay_config.json'
-relay_log_file = './logs/system.log'
 
 refresh_rate = 1
 

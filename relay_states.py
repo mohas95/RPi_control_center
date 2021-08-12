@@ -8,8 +8,11 @@ import RPi.GPIO as GPIO
 import logging
 import logzero
 from logzero import logger, setup_logger
+
 format = '%(color)s[%(levelname)1.1s %(asctime)s %(module)s:%(funcName)s %(thread)d]%(end_color)s %(message)s'
 formatter = logzero.LogFormatter(fmt=format)
+
+system_logger = setup_logger(name=__name__+"status_logger", logfile='./logs/system.log', level=10, formatter = formatter)
 
 def threaded(func):
     def wrapper(*args, **kwargs):
@@ -21,13 +24,14 @@ def threaded(func):
     return wrapper
 
 class Relay():
-    def __init__(self, id, name, pin, state=False):
+    def __init__(self, id, name, pin, state=False, log_file = './logs/process.log'):
         self.id = id
         self.name = name
         self.pin = pin
         self.state = state
         self.thread = self.start()
         self.api_file = './api/relay'+self.id +'_'+str(self.pin)+'.json'
+        self.logger = setup_logger(name=__name__, logfile=log_file, level=10, formatter = formatter)
 
     @property
     def id(self):
@@ -83,6 +87,18 @@ class Relay():
         '''
         return self._api_file
 
+    @property
+    def logger(self):
+        '''
+        '''
+        return self._logger
+
+    @logger.setter
+    def logger(self, value):
+        '''
+        '''
+        self._logger = value
+
     @api_file.setter
     def api_file(self, value):
         '''
@@ -90,15 +106,11 @@ class Relay():
 
         self._api_file = value
 
-    def update_api_file(self):
-
-        self.api_file = './api/relay'+self.id +'_'+str(self.pin)+ '.json'
-
     def push_to_api(self, value = None):
         if value:
             self.api_file = value
         else:
-            self.update_api_file()
+            self.api_file = './api/relay'+self.id +'_'+str(self.pin)+ '.json'
 
         timestamp = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
         data = {"relay_id":self.id, "name":self.name,"pin":self.pin, "status":self.state, "last updated":timestamp}
@@ -115,17 +127,17 @@ class Relay():
                     pin = self.pin
                     GPIO.setup(pin, GPIO.OUT)
                     GPIO.output(pin, GPIO.HIGH)
-                    print(f'[{self.id}:{self.name}]GPIO {pin} sucessfull initialized')
+                    self.logger.info(f'[{self.id}:{self.name}]GPIO {pin} sucessfull initialized')
 
                     success = True
             except:
-                print(f'[{self.id}:{self.name}]GPIO {pin} failed to initialize')
+                self.logger.error(f'[{self.id}:{self.name}]GPIO {pin} failed to initialize')
                 exit()
             try:
                 while self.state:
                     if GPIO.input(pin):
                         GPIO.output(pin, GPIO.LOW)
-                        print(f'[{self.id}:{self.name}]GPIO {pin} Switch ON')
+                        self.logger.info(f'[{self.id}:{self.name}]GPIO {pin} Switch ON')
 
                     else:
                         pass
@@ -133,13 +145,13 @@ class Relay():
                 GPIO.output(pin, GPIO.HIGH)
                 GPIO.cleanup(pin)
 
-                print(f'[{self.id}:{self.name}]GPIO {pin} Error with the process, switching OFF and cleaning pin')
+                self.logger.error(f'[{self.id}:{self.name}]GPIO {pin} Error with the process, switching OFF and cleaning pin')
                 exit()
 
 
             GPIO.output(pin, GPIO.HIGH)
             GPIO.cleanup(pin)
-            print(f'[{self.id}:{self.name}]GPIO {pin} Switch OFF')
+            self.logger.info(f'[{self.id}:{self.name}]GPIO {pin} Switch OFF')
 
 
 ########################################## Module functions
@@ -213,9 +225,15 @@ def update_relay_states(dict_of_relays, relay_config_file):
 
         relay.push_to_api()
 
-def log_all_relays(dict_of_relays, log_file):
 
-    logger = setup_logger(name=__name__+"status_logger", logfile="./logs/status.log", level=10, formatter = formatter)
+def log_all_relays(dict_of_relays, custom_logger= None):
+    global system_logger
+    global process_logger
+
+    if custom_logger:
+        logger = custom_logger
+    else:
+        logger = system_logger
 
     for relay_id, relay in dict_of_relays.items():
-        logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
+        system_logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
