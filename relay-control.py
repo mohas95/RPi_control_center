@@ -10,7 +10,7 @@ refresh_rate = 1
 
 if __name__ == '__main__':
 
-    rs.begin(relay_config_file, refresh_rate=1)
+    rs.begin(relay_config_file=relay_config_file, refresh_rate=refresh_rate)
 
     try:
         while true:
