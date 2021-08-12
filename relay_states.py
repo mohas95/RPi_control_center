@@ -198,7 +198,8 @@ def load_relay_objects(relay_config):
 
     return relay_objects
 
-def update_relay_states(dict_of_relays, relay_config_file):
+def update_relay_states(dict_of_relays, relay_config_file, custom_logger=None):
+    global system_logger
     relay_config= load_relay_config(relay_config_file)
 
     for relay_id, relay in dict_of_relays.items():
@@ -225,15 +226,9 @@ def update_relay_states(dict_of_relays, relay_config_file):
 
         relay.push_to_api()
 
+        if custom_logger:
+            logger = custom_logger
+        else:
+            logger = system_logger
 
-def log_all_relays(dict_of_relays, custom_logger= None):
-    global system_logger
-    global process_logger
-
-    if custom_logger:
-        logger = custom_logger
-    else:
-        logger = system_logger
-
-    for relay_id, relay in dict_of_relays.items():
-        system_logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
+        logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
