@@ -200,13 +200,13 @@ def load_relay_config(config_json_file):
     return result
 
 
-def load_relay_objects(relay_config):
+def load_relay_objects(relay_config,refresh_rate=1):
 
     relay_objects = {}
 
     for relay_id, relay_properties in relay_config.items():
 
-        relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'])
+        relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = refresh_rate)
 
         relay_objects[relay_id] = relay
 

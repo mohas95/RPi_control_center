@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     rs.begin()
     relay_config = rs.load_relay_config(relay_config_file)
-    relays= rs.load_relay_objects(relay_config)
+    relays= rs.load_relay_objects(relay_config, refresh_rate=refresh_rate)
 
     try:
         while True:
