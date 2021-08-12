@@ -9,6 +9,8 @@ import logging
 import logzero
 from logzero import logger, setup_logger
 
+active = None
+
 format = '%(color)s[%(levelname)1.1s %(asctime)s %(module)s:%(funcName)s %(thread)d]%(end_color)s %(message)s'
 formatter = logzero.LogFormatter(fmt=format)
 
@@ -170,12 +172,34 @@ class Relay():
 
 ########################################## Module functions
 
-def begin():
+
+@threaded
+def begin(relay_config_file, refresh_rate=1):
+    global system_logger
+    global active = True
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
 
+    relay_config = load_relay_config(relay_config_file)
+    relays= load_relay_objects(relay_config, refresh_rate=refresh_rate)
+
+    try:
+        while active:
+            update_relay_states(dict_of_relays = relays, relay_config_file=relay_config_file)
+            time.sleep(refresh_rate)
+    except:
+        GPIO.cleanup()
+        stop()
+        print('Error, Stopping the relay processes')
+        exit()
+
+
+
 def stop():
+    global active = False
     GPIO.cleanup()
+    print('Done!')
+
 
 def load_relay_config(config_json_file):
     '''

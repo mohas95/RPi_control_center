@@ -6,19 +6,31 @@ from relay_states import Relay
 
 #################### global variable
 relay_config_file = './relay_config.json'
-
 refresh_rate = 1
 
 if __name__ == '__main__':
 
-    rs.begin()
-    relay_config = rs.load_relay_config(relay_config_file)
-    relays= rs.load_relay_objects(relay_config, refresh_rate=refresh_rate)
+    rs.begin(relay_config_file, refresh_rate=1)
 
     try:
-        while True:
-            rs.update_relay_states(dict_of_relays = relays, relay_config_file=relay_config_file)
-            time.sleep(refresh_rate)
-    except:
-        print('\nDone!')
+        while true:
+
+            print('test')
+            time.sleep(5)
+
+    except():
         rs.stop()
+        print('main done!')
+
+
+    # rs.begin()
+    # relay_config = rs.load_relay_config(relay_config_file)
+    # relays= rs.load_relay_objects(relay_config, refresh_rate=refresh_rate)
+    #
+    # try:
+    #     while True:
+    #         rs.update_relay_states(dict_of_relays = relays, relay_config_file=relay_config_file)
+    #         time.sleep(refresh_rate)
+    # except:
+    #     print('\nDone!')
+    #     rs.stop()
