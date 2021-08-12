@@ -176,7 +176,9 @@ class Relay():
 @threaded
 def begin(relay_config_file, refresh_rate=1):
     global system_logger
-    global active = True
+    global active
+
+    active = True
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
 
@@ -196,7 +198,9 @@ def begin(relay_config_file, refresh_rate=1):
 
 
 def stop():
-    global active = False
+    global active
+
+    active = False
     GPIO.cleanup()
     print('Done!')
 
