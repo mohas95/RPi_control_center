@@ -57,12 +57,12 @@
 
 ## Issues
 - MQTT communication for UI control
-- Calibration protocol
-- Turn this into a class structure for replicability/ abstraction (objectify)
 - add liscence
-- json files for api
-- Logging over print statements (log files)
 - Nonblocking starting functionality for module
+- error handling
 
 ### resolved
 - Service file
+- json files for api
+- Logging over print statements (log files)
+- Turn this into a class structure for replicability/ abstraction (objectify)
