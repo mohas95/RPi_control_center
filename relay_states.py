@@ -12,7 +12,7 @@ from logzero import logger, setup_logger
 format = '%(color)s[%(levelname)1.1s %(asctime)s %(module)s:%(funcName)s %(thread)d]%(end_color)s %(message)s'
 formatter = logzero.LogFormatter(fmt=format)
 
-system_logger = setup_logger(name=__name__+"status_logger", logfile='./logs/system.log', level=10, formatter = formatter)
+system_logger = setup_logger(name=str(__name__)+"_status_logger", logfile='./logs/system.log', level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
 
 def threaded(func):
     def wrapper(*args, **kwargs):
@@ -31,7 +31,7 @@ class Relay():
         self.state = state
         self.refresh_rate = refresh_rate
         self.api_file = './api/relay'+self.id +'_'+str(self.pin)+'.json'
-        self.logger = setup_logger(name=__name__, logfile=log_file, level=10, formatter = formatter)
+        self.logger = setup_logger(name=str(__name__)+"_process_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
         self.thread = self.start()
 
     @property
