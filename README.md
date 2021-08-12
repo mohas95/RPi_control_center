@@ -45,7 +45,7 @@
 
 
 ## Configuration and user control files
-### ./status.json
+### ./relay_config.json
 - this file will set status of the processes: PH up, PH Down, and PH Monitoring, this file can be modified directly but serves as a file that allows for user controls
 ### ./system/relay-control.service
 - this file runs the relay-control script as a service file on linux OS

@@ -4,6 +4,7 @@ import threading
 import time
 import datetime
 import RPi.GPIO as GPIO
+import logzero
 
 
 def threaded(func):
@@ -101,8 +102,6 @@ class Relay():
         with open(self.api_file, "w") as f:
             f.write(json.dumps(data, indent=4))
 
-
-
     @threaded
     def start(self):
         success = False
@@ -183,9 +182,6 @@ def load_relay_objects(relay_config):
 
     return relay_objects
 
-
-
-
 def update_relay_states(dict_of_relays, relay_config_file):
     relay_config= load_relay_config(relay_config_file)
 
@@ -212,8 +208,7 @@ def update_relay_states(dict_of_relays, relay_config_file):
             pass
 
         relay.push_to_api()
-        # print(relay.thread)
 
-def print_all_relays(dict_of_relays):
+def log_all_relays(dict_of_relays, ):
     for relay_id, relay in dict_of_relays.items():
         print(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
