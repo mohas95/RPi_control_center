@@ -153,6 +153,8 @@ class Relay():
 
                     else:
                         pass
+
+                    time.sleep(self.refresh_rate)
             except:
                 GPIO.output(pin, GPIO.HIGH)
                 GPIO.cleanup(pin)
