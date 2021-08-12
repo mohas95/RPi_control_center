@@ -62,6 +62,7 @@
 - add liscence
 - json files for api
 - Logging over print statements (log files)
+- Nonblocking starting functionality for module
 
 ### resolved
 - Service file
