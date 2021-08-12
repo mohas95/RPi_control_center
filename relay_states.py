@@ -4,8 +4,12 @@ import threading
 import time
 import datetime
 import RPi.GPIO as GPIO
-import logzero
 
+import logging
+import logzero
+from logzero import logger, setup_logger
+format = '%(color)s[%(levelname)1.1s %(asctime)s %(module)s:%(funcName)s %(thread)d]%(end_color)s %(message)s'
+formatter = logzero.LogFormatter(fmt=format)
 
 def threaded(func):
     def wrapper(*args, **kwargs):
@@ -209,6 +213,9 @@ def update_relay_states(dict_of_relays, relay_config_file):
 
         relay.push_to_api()
 
-def log_all_relays(dict_of_relays, ):
+def log_all_relays(dict_of_relays, log_file):
+
+    logger = setup_logger(name=__name__+"status_logger", logfile="./logs/status.log", level=10, formatter = formatter)
+
     for relay_id, relay in dict_of_relays.items():
-        print(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
+        logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')

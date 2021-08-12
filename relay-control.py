@@ -19,7 +19,7 @@ if __name__ == '__main__':
     try:
         while True:
             rs.update_relay_states(dict_of_relays = relays, relay_config_file=relay_config_file)
-            rs.log_all_relays(relays)
+            rs.log_all_relays(relays, log_file =relay_log_file )
             time.sleep(refresh_rate)
     except:
         print('\nDone!')
