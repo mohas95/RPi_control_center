@@ -1,3 +1,4 @@
+import os
 import os.path
 import json
 import threading
@@ -184,7 +185,9 @@ class BulkUpdater()
         self.status = False
         self.default_config = default_config
         self.config_file = config_file
+        self.saved_config = None
         self.refresh_rate = refresh_rate
+        self.relay_dict = load_relay_objects()
         self.logger = setup_logger(name=str(__name__)+"_status_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
 
         # self.thread = self.begin()
@@ -216,13 +219,50 @@ class BulkUpdater()
     def config_file(self):
         '''
         '''
-        return self.config_file
+        return self._config_file
 
     @config_file.setter
     def config_file(self, value):
         '''
         '''
         self._config_file = value
+
+
+    @property
+    def saved_config(self):
+        '''
+        '''
+        return self._saved_config
+
+    @saved_config.setter
+    def saved_config(self, value):
+        '''
+        '''
+        self._saved_config = value
+
+    @property
+    def relay_dict(self):
+        '''
+        '''
+        return self._relay_dict
+
+    @relay_dict.setter
+    def relay_dict(self, value):
+        '''
+        '''
+        self._relay_dict = value
+
+    @property
+    def refresh_rate(self):
+        '''
+        '''
+        return self._refresh_rate
+
+    @refresh_rate.setter
+    def refresh_rate(self, value):
+        '''
+        '''
+        self._refresh_rate = value
 
     @property
     def logger(self):
@@ -236,34 +276,173 @@ class BulkUpdater()
         '''
         self._logger = value
 
+    def load_config(self):
+        '''
+        return results: dictionary
+        '''
+        try:
+            if os.path.isfile(self.config_file):
+                try:
+                    with open(self.config_file, "r") as f:
+                        result = json.load(f)
+                    print(f'Relay config file found and loaded: {self.config_file}')
+                except:
+                    if self.saved_config:
+                        result = self.saved_config
+                        with open(self.config_file, "w") as f:
+                            f.write(json.dumps(result, indent=4))
+                        print(f'Error, currupt relay config file, loading the last saved configuration: {self.config_file}')
+                    else:
+                        result = self.default_config
+                        with open(self.config_file, "w") as f:
+                            f.write(json.dumps(result, indent=4))
+                        print(f'Error, currupt relay config file, could not get last known state creating a default file with default parameters: {self.config_file}')
+            else:
+                result = self.default_config
+                with open(self.config_file, "w") as f:
+                    f.write(json.dumps(result, indent=4))
+                print(f'Relay config file not found, creating a default file with default parameters: {self.config_file}')
+
+            self.saved_config = result
+            return result
+
+        except:
+            print(f'Major Error, config file could not be loaded')
+            exit()
 
 
+    def load_relay_objects(self):
+        '''
+        '''
+        try:
+            config = self.load_config()
+
+            relay_objects = {}
+
+            for relay_id, relay_properties in config.items():
+
+                relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate)
+
+                relay_objects[relay_id] = relay
+
+            self.relay_dict = relay_objects
+
+            print('Relay objects instantiated and loaded')
+
+            return relay_objects
+
+        except:
+            print('Major Error relay objects could not be loaded')
+            exit()
 
 
+    def update_relay_states(self):
+        '''
+        '''
+        try:
+            config = self.load_config()
 
+            for relay_id, relay in self.relay_dict.items():
 
+                if config[relay_id]['name'] != relay.name:
+                    relay.name = config[relay_id]['name']
+                else:
+                    pass
 
+                if config[relay_id]['pin'] != relay.pin:
+                    relay.pin = config[relay_id]['pin']
+                else:
+                    pass
 
+                if config[relay_id]['state'] != relay.state:
+                    relay.state = relay_config[relay_id]['state']
+                else:
+                    pass
 
+                if not relay.thread.is_alive():
+                    relay.thread = relay.start()
+                else:
+                    pass
 
+                relay.push_to_api()
 
+                self.logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
 
+        except:
+            self.logger.info('Major Error in updating')
+            exit()
 
+    def update_config_file(self, relay_id, state = False):
+        '''
+        '''
+        try:
+            config = self.load_config()
 
+            config[relay_id]['state'] = state
 
+            with open(config_file, "w") as f:
+                f.write(json.dumps(config, indent=4))
 
+            state_string = ' OFF' if state==False else ' ON' if state ==True else ' ?'
+            print(f'Successful changed relay {relay_id} {state_string} in config file: {config_file}')
+        except:
+            print(f'Major Error could not relay {relay_id} {state_string} in config file: {config_file}')
+            exit()
 
+    def safe_stop_all_relays(self):
+        '''
+        '''
+        self.status = False
 
+        for relay_id, relay in self.relay_dict.items():
+            self.update_config_file(relay_id = relay_id, state = False)
 
+        self.update_relay_states()
 
+        time.sleep(10)
 
+        print('Safely stopped all relays')
 
+    def force_quit(self):
+        '''
+        '''
+        if os.path.exists(self.config_file):
+            os.remove(self.config_file)
+        else:
+            print("The file does not exist")
 
+        self.load_config()
+        GPIO.cleanup()
+        exit()
 
+    @threaded
+    def begin(self):
+        '''
+        '''
 
+        self.status = True
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
 
+        try:
+            while self.status:
+                self.update_relay_states()
+                time.sleep(self.refresh_rate)
 
+            self.safe_stop_all_relays()
 
+        except:
+            try:
+                self.safe_stop_all_relays()
+            except:
+                self.force_quit()
+            print('Error, Stopping the relay processes')
+            exit()
+
+    def stop():
+        '''
+        '''
+        self.status = False
 
 
 ########################################## Module functions
