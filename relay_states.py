@@ -191,7 +191,6 @@ def begin(relay_config_file, refresh_rate=1):
             time.sleep(refresh_rate)
 
         safe_stop_all_relays(relay_config_file=relay_config_file, dict_of_relays =relays)
-        exit()
 
     except:
         try:
