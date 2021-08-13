@@ -191,7 +191,7 @@ def begin(relay_config_file, refresh_rate=1):
             time.sleep(refresh_rate)
 
         safe_stop_all_relays(relay_config_file=relay_config_file, dict_of_relays =relays)
-
+        exit()
 
     except:
         try:
@@ -205,7 +205,6 @@ def stop():
     global active
 
     active = False
-
     print('Done!')
 
 
@@ -293,9 +292,6 @@ def safe_stop_all_relays(relay_config_file, dict_of_relays):
 
     update_relay_states(dict_of_relays, relay_config_file, custom_logger=None)
 
-    # time.sleep(largest_refresh_rate*2)
-    #
-    # GPIO.cleanup()
     print('Done!')
 
 def force_quit():
@@ -306,11 +302,7 @@ def force_quit():
 def update_config_file(relay_config_file, relay_id, state = False):
     relay_config = load_relay_config(relay_config_file)
 
-    print(relay_config)
-
     relay_config[relay_id]['state'] = state
-
-    print(relay_config)
 
     with open(relay_config_file, "w") as f:
         f.write(json.dumps(relay_config, indent=4))
