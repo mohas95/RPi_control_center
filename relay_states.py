@@ -180,7 +180,7 @@ class Relay():
             GPIO.cleanup(pin)
             self.logger.info(f'[{self.id}:{self.name}]GPIO {pin} Switch OFF')
 
-class BulkUpdater()
+class BulkUpdater():
     def __init__(self,config_file, default_config = default_relay_config , refresh_rate = 1, log_file = './logs/system.log'):
         self.status = False
         self.default_config = default_config
