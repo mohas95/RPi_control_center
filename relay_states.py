@@ -411,7 +411,7 @@ class BulkUpdater():
         exit()
 
     @threaded
-    def begin(self):
+    def start(self):
         '''
         '''
 
@@ -442,7 +442,7 @@ class BulkUpdater():
 ########################################################### Main Function
 if __name__ == '__main__':
     control_box = BulkUpdater(config_file = './relay_config.json', default_config = default_relay_config , refresh_rate = 1)
-    control_box.begin()
+    control_box.start()
 
     try:
         while True:
