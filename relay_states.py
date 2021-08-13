@@ -299,8 +299,12 @@ def force_quit():
 def update_config_file(relay_config_file, relay_id, state = False):
     relay_config = load_relay_config(relay_config_file)
 
+    print(relay_config)
+
     relay_config[relay_id]['state'] = state
 
+    print(relay_config)
+    
     with open(relay_config_file, "w") as f:
         f.write(json.dumps(relay_config, indent=4))
 
