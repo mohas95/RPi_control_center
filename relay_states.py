@@ -439,7 +439,7 @@ class BulkUpdater():
             print('Error, Stopping the relay processes')
             exit()
 
-    def stop():
+    def stop(self):
         '''
         '''
         self.status = False
