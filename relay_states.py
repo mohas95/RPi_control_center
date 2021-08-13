@@ -283,10 +283,17 @@ def safe_stop_all_relays(relay_config_file, dict_of_relays):
     global active
     active = False
 
+    largest_refresh_rate = 0
+
     for relay_id, relay in dict_of_relays.items():
         update_config_file(relay_config_file = relay_config_file, relay_id = relay_id, state = False)
 
+        if largest_refresh_rate > relay.refresh_rate:
+            largest_refresh_rate = relay.refresh_rate
+
     update_relay_states(dict_of_relays, relay_config_file, custom_logger=None)
+
+    time.sleep(largest_refresh_rate*2)
 
     GPIO.cleanup()
     print('Done!')
