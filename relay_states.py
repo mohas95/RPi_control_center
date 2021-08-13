@@ -453,10 +453,14 @@ if __name__ == '__main__':
     control_box = BulkUpdater(config_file = './relay_config.json', default_config = default_relay_config , refresh_rate = 1)
     control_box.begin()
 
+    try:
+        while True:
 
-    time.sleep(10)
+            print('H3h3')
 
-    control_box.stop()
+            time.sleep(5)
+    except:
+        control_box.stop()
 
 ########################################## Module functions
 # @threaded
