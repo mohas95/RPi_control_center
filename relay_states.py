@@ -293,9 +293,9 @@ def safe_stop_all_relays(relay_config_file, dict_of_relays):
 
     update_relay_states(dict_of_relays, relay_config_file, custom_logger=None)
 
-    time.sleep(largest_refresh_rate*2)
-
-    GPIO.cleanup()
+    # time.sleep(largest_refresh_rate*2)
+    #
+    # GPIO.cleanup()
     print('Done!')
 
 def force_quit():
