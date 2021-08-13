@@ -302,6 +302,6 @@ def update_config_file(relay_config_file, relay_id, state = False):
     relay_config[relay_id]['state'] = state
 
     with open(config_json_file, "w") as f:
-        f.write(json.dumps(relay_config, indent=4))
+        f.write(json.dumps(relay_config_file, indent=4))
 
     print(f'Successful changed relay {relay_id} in config file: {relay_config_file}')
