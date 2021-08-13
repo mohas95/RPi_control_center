@@ -284,7 +284,7 @@ def safe_stop_all_relays(relay_config_file, dict_of_relays):
     active = False
 
     for relay_id, relay in dict_of_relays.items():
-        update_config_file(relay_config_file = relay_config_file, relay_id = relay_ids, state = False)
+        update_config_file(relay_config_file = relay_config_file, relay_id = relay_id, state = False)
 
     update_relay_states(dict_of_relays, relay_config_file, custom_logger=None)
 
@@ -304,7 +304,7 @@ def update_config_file(relay_config_file, relay_id, state = False):
     relay_config[relay_id]['state'] = state
 
     print(relay_config)
-    
+
     with open(relay_config_file, "w") as f:
         f.write(json.dumps(relay_config, indent=4))
 
