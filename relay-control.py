@@ -15,6 +15,6 @@ if __name__ == '__main__':
     try:
         while True:
             pass
-    except KeyboardInterrupt():
+    except KeyboardInterrupt:
         rs.stop()
         print('main done!')
