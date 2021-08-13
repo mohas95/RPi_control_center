@@ -14,20 +14,7 @@ if __name__ == '__main__':
 
     try:
         while True:
-
+            pass
     except KeyboardInterrupt():
         rs.stop()
         print('main done!')
-
-
-    # rs.begin()
-    # relay_config = rs.load_relay_config(relay_config_file)
-    # relays= rs.load_relay_objects(relay_config, refresh_rate=refresh_rate)
-    #
-    # try:
-    #     while True:
-    #         rs.update_relay_states(dict_of_relays = relays, relay_config_file=relay_config_file)
-    #         time.sleep(refresh_rate)
-    # except:
-    #     print('\nDone!')
-    #     rs.stop()
