@@ -11,7 +11,7 @@ from logzero import logger, setup_logger
 
 
 ########################################################### Global Variables
-active = None
+active = None # passed to
 
 default_relay_config = {
         "1":{'name':'name1', 'pin':26, 'state':False},
@@ -21,9 +21,9 @@ default_relay_config = {
 
 format = '%(color)s[%(levelname)1.1s %(asctime)s %(module)s:%(funcName)s %(thread)d]%(end_color)s %(message)s'
 formatter = logzero.LogFormatter(fmt=format)
-system_logger = setup_logger(name="status_logger", logfile='./logs/system.log', level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
+system_logger = setup_logger(name=str(__name__)+"_status_logger", logfile='./logs/system.log', level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
 
-
+########################################################### Wrapper/decorator definition function
 def threaded(func):
     def wrapper(*args, **kwargs):
 
@@ -32,6 +32,8 @@ def threaded(func):
 
         return thread
     return wrapper
+
+########################################################### Classes
 
 class Relay():
     def __init__(self, id, name, pin, state=False, refresh_rate = 1, log_file = './logs/process.log'):
@@ -176,6 +178,92 @@ class Relay():
             GPIO.output(pin, GPIO.HIGH)
             GPIO.cleanup(pin)
             self.logger.info(f'[{self.id}:{self.name}]GPIO {pin} Switch OFF')
+
+class BulkUpdater()
+    def __init__(self,config_file, default_config = default_relay_config , refresh_rate = 1, log_file = './logs/system.log'):
+        self.status = False
+        self.default_config = default_config
+        self.config_file = config_file
+        self.refresh_rate = refresh_rate
+        self.logger = setup_logger(name=str(__name__)+"_status_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
+
+        # self.thread = self.begin()
+
+    @property
+    def status(self):
+        '''
+        '''
+        return self._status
+
+    @status.setter
+    def status(self, value):
+        '''
+        '''
+        self._status = value
+
+    @property
+    def default_config(self):
+        '''
+        '''
+        return self._default_config
+
+    @default_config.setter
+    def default_config(self, value):
+        '''
+        '''
+        self._default_config = value
+    @property
+    def config_file(self):
+        '''
+        '''
+        return self.config_file
+
+    @config_file.setter
+    def config_file(self, value):
+        '''
+        '''
+        self._config_file = value
+
+    @property
+    def logger(self):
+        '''
+        '''
+        return self._logger
+
+    @logger.setter
+    def logger(self, value):
+        '''
+        '''
+        self._logger = value
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ########################################## Module functions
