@@ -384,9 +384,9 @@ class BulkUpdater():
                 f.write(json.dumps(self.saved_config, indent=4))
 
             state_string = ' OFF' if state==False else ' ON' if state ==True else ' ?'
-            print(f'Successful changed relay {relay_id} {state_string} in config file: {config_file}')
+            print(f'Successful changed relay {relay_id} {state_string} in config file: {self.config_file}')
         except:
-            print(f'Major Error could not relay {relay_id} {state_string} in config file: {config_file}')
+            print(f'Major Error could not relay {relay_id} {state_string} in config file: {self.config_file}')
             exit()
 
     def safe_stop_all_relays(self):
@@ -406,6 +406,7 @@ class BulkUpdater():
     def force_quit(self):
         '''
         '''
+        print('Force Quit!')
         if os.path.exists(self.config_file):
             os.remove(self.config_file)
         else:
