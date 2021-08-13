@@ -291,7 +291,7 @@ def safe_stop_all_relays(relay_config_file, dict_of_relays):
     GPIO.cleanup()
     print('Done!')
 
-force_quit():
+def force_quit():
     GPIO.cleanup()
     exit()
 
