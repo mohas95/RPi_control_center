@@ -446,6 +446,7 @@ if __name__ == '__main__':
 
     try:
         while True:
-            time.sleep(5)
+            pass
+            # time.sleep(5)
     except:
         control_box.stop()
