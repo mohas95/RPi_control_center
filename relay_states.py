@@ -9,12 +9,20 @@ import logging
 import logzero
 from logzero import logger, setup_logger
 
+
+########################################################### Global Variables
 active = None
+
+default_relay_config = {
+        "1":{'name':'name1', 'pin':26, 'state':False},
+        "2":{'name':'name2', 'pin':20, 'state':False},
+        "3":{'name':'name3', 'pin':21, 'state':False},
+}
 
 format = '%(color)s[%(levelname)1.1s %(asctime)s %(module)s:%(funcName)s %(thread)d]%(end_color)s %(message)s'
 formatter = logzero.LogFormatter(fmt=format)
+system_logger = setup_logger(name="status_logger", logfile='./logs/system.log', level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
 
-system_logger = setup_logger(name=str(__name__)+"_status_logger", logfile='./logs/system.log', level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
 
 def threaded(func):
     def wrapper(*args, **kwargs):
@@ -173,6 +181,8 @@ class Relay():
 ########################################## Module functions
 @threaded
 def begin(relay_config_file, refresh_rate=1):
+    '''
+    '''
     global system_logger
     global active
 
@@ -199,6 +209,8 @@ def begin(relay_config_file, refresh_rate=1):
         exit()
 
 def stop():
+    '''
+    '''
     global active
 
     active = False
@@ -209,11 +221,7 @@ def load_relay_config(config_json_file):
     '''
     return results: dictionary
     '''
-    default_relay_config = {
-        "1":{'name':'name1', 'pin':26, 'state':False},
-        "2":{'name':'name2', 'pin':20, 'state':False},
-        "3":{'name':'name3', 'pin':21, 'state':False},
-    }
+    global default_relay_config
 
     if os.path.isfile(config_json_file):
 
@@ -229,7 +237,8 @@ def load_relay_config(config_json_file):
 
 
 def load_relay_objects(relay_config,refresh_rate=1):
-
+    '''
+    '''
     relay_objects = {}
 
     for relay_id, relay_properties in relay_config.items():
@@ -241,6 +250,8 @@ def load_relay_objects(relay_config,refresh_rate=1):
     return relay_objects
 
 def update_relay_states(dict_of_relays, relay_config_file, custom_logger=None):
+    '''
+    '''
     global system_logger
     relay_config= load_relay_config(relay_config_file)
 
@@ -276,6 +287,8 @@ def update_relay_states(dict_of_relays, relay_config_file, custom_logger=None):
         logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
 
 def update_config_file(relay_config_file, relay_id, state = False):
+    '''
+    '''
     relay_config = load_relay_config(relay_config_file)
 
     relay_config[relay_id]['state'] = state
@@ -287,6 +300,8 @@ def update_config_file(relay_config_file, relay_id, state = False):
     print(f'Successful changed relay {relay_id} {state_string} in config file: {relay_config_file}')
 
 def safe_stop_all_relays(relay_config_file, dict_of_relays):
+    '''
+    '''
     global active
     active = False
 
@@ -303,5 +318,7 @@ def safe_stop_all_relays(relay_config_file, dict_of_relays):
     print('Done!')
 
 def force_quit():
+    '''
+    '''
     GPIO.cleanup()
     exit()
