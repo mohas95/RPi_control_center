@@ -171,8 +171,6 @@ class Relay():
 
 
 ########################################## Module functions
-
-
 @threaded
 def begin(relay_config_file, refresh_rate=1):
     global system_logger

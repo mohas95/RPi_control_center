@@ -15,10 +15,6 @@ if __name__ == '__main__':
     try:
         while True:
 
-            print('test')
-            time.sleep(5)
-            rs.stop()
-
     except KeyboardInterrupt():
         rs.stop()
         print('main done!')
