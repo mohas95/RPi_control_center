@@ -315,11 +315,11 @@ class BulkUpdater():
         '''
         '''
         try:
-            config = self.load_config()
+            self.load_config()
 
             relay_objects = {}
 
-            for relay_id, relay_properties in config.items():
+            for relay_id, relay_properties in self.saved_config.items():
 
                 relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate)
 
@@ -345,7 +345,7 @@ class BulkUpdater():
             for relay_id, relay in self.relay_dict.items():
 
                 if self.saved_config[relay_id]['name'] != relay.name:
-                    relay.name = config[relay_id]['name']
+                    relay.name = self.saved_config[relay_id]['name']
                 else:
                     pass
 
@@ -376,12 +376,12 @@ class BulkUpdater():
         '''
         '''
         try:
-            config = self.load_config()
+            self.load_config()
 
-            config[relay_id]['state'] = state
+            self.saved_config[relay_id]['state'] = state
 
             with open(self.config_file, "w") as f:
-                f.write(json.dumps(config, indent=4))
+                f.write(json.dumps(self.saved_config, indent=4))
 
             state_string = ' OFF' if state==False else ' ON' if state ==True else ' ?'
             print(f'Successful changed relay {relay_id} {state_string} in config file: {config_file}')
