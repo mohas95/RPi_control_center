@@ -28,7 +28,7 @@ formatter = logzero.LogFormatter(fmt=format)
 def threaded(func):
     def wrapper(*args, **kwargs):
 
-        thread = threading.Thread(target=func, args=args, kwargs=kwargs, daemon=True)
+        thread = threading.Thread(target=func, args=args, kwargs=kwargs, daemon=False)
         thread.start()
 
         return thread
@@ -455,9 +455,6 @@ if __name__ == '__main__':
 
     try:
         while True:
-
-            print('H3h3')
-
             time.sleep(5)
     except:
         control_box.stop()
