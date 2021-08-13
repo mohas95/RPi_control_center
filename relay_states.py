@@ -189,19 +189,23 @@ def begin(relay_config_file, refresh_rate=1):
         while active:
             update_relay_states(dict_of_relays = relays, relay_config_file=relay_config_file)
             time.sleep(refresh_rate)
+
+        safe_stop_all_relays(relay_config_file=relay_config_file, dict_of_relays =relays)
+
+
     except:
-        GPIO.cleanup()
-        stop()
+        try:
+            safe_stop_all_relays(relay_config_file=relay_config_file, dict_of_relays =relays)
+        except:
+            force_quit()
         print('Error, Stopping the relay processes')
         exit()
-
-
 
 def stop():
     global active
 
     active = False
-    GPIO.cleanup()
+
     print('Done!')
 
 
@@ -274,3 +278,30 @@ def update_relay_states(dict_of_relays, relay_config_file, custom_logger=None):
             logger = system_logger
 
         logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
+
+def safe_stop_all_relays(relay_config_file, dict_of_relays):
+    global active
+    active = False
+
+    for relay_id, relay in dict_of_relays.items():
+        update_config_file(relay_config_file, relay_id, False)
+
+    update_relay_states(dict_of_relays, relay_config_file, custom_logger=None)
+
+    GPIO.cleanup()
+    print('Done!')
+
+force_quit():
+    GPIO.cleanup()
+    exit()
+
+
+def update_config_file(relay_config_file, relay_id, state = False):
+    relay_config = load_relay_config(relay_config_file)
+
+    relay_config[relay_id]['state'] = state
+
+    with open(config_json_file, "w") as f:
+        f.write(json.dumps(relay_config, indent=4))
+
+    print(f'Successful changed relay {relay_id} in config file: {relay_config_file}')
