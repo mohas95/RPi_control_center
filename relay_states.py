@@ -285,7 +285,6 @@ class BulkUpdater():
                 try:
                     with open(self.config_file, "r") as f:
                         result = json.load(f)
-                    print(f'Relay config file found and loaded: {self.config_file}')
                 except:
                     if self.saved_config:
                         result = self.saved_config
