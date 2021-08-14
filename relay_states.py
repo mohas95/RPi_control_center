@@ -91,7 +91,6 @@ class Relay():
         self.state = state
         self.refresh_rate = refresh_rate
         self.api_file = './api/relay'+self.id +'_'+str(self.pin)+'.json'
-        print('tits')
         self.logger = setup_logger(name=str(__name__)+"_process_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
         print('tits2')
         self.thread = self.start()
@@ -105,7 +104,7 @@ class Relay():
     @id.setter
     def id(self, value):
         """Set the id string of the relay."""
-        self._id = value
+        self._id = str(value)
 
     @property
     def name(self):
@@ -115,7 +114,7 @@ class Relay():
     @name.setter
     def name(self, value):
         """Set the name string of the relay."""
-        self._name = value
+        self._name = str(value)
 
     @property
     def pin(self):
@@ -161,8 +160,8 @@ class Relay():
     @logger.setter
     def logger(self, value):
         """Set the logger of the relay."""
-        if not instance(value, logging.logger):
-            raise TypeError("refresh rate must be an integer value")
+        # if not instance(value, logging.logger):
+        #     raise TypeError("refresh rate must be an integer value")
         self._logger = value
 
     @property
