@@ -92,9 +92,7 @@ class Relay():
         self.refresh_rate = refresh_rate
         self.api_file = './api/relay'+self.id +'_'+str(self.pin)+'.json'
         self.logger = setup_logger(name=str(__name__)+"_process_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
-        print('tits2')
         self.thread = self.start()
-        print('tits3')
 
     @property
     def id(self):
@@ -413,7 +411,6 @@ class BulkUpdater():
             relay_objects = {}
             for relay_id, relay_properties in self.saved_config.items():
                 relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate)
-                print('poop31')
                 relay_objects[relay_id] = relay
             self.relay_dict = relay_objects
             print('Relay objects instantiated and loaded')
