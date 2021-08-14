@@ -23,14 +23,10 @@ formatter = logzero.LogFormatter(fmt=format) # format object for logzero logger
 
 ########################################################### Wrapper/decorator definition function
 def threaded(func):
-    '''
-
-    '''
+    """start and return a thread of the passed in function. Threadify a function with the @threaded decorator"""
     def wrapper(*args, **kwargs):
-
         thread = threading.Thread(target=func, args=args, kwargs=kwargs, daemon=False)
         thread.start()
-
         return thread
     return wrapper
 
@@ -63,7 +59,7 @@ class Relay():
     Methods
     -------
     push_to_api(custom_api_file = None):
-        Prints the person's name and age.
+        pushes the state and attributes of the relay to the api file
 
     @threaded
     def start():
@@ -192,7 +188,7 @@ class Relay():
 
     @threaded
     def start(self):
-        """Starts the non-blocking parallel relay thread controlling physical state of the relay based on its attributes"""
+        """Return a thread and start the non-blocking parallel relay thread controlling physical state of the relay based on its attributes"""
         success = False
         while self.state:
             try:
@@ -224,7 +220,67 @@ class Relay():
 
 ##################### BulkUpdater Class
 class BulkUpdater():
+    """
+    A class that handles the bulk updating process between configuration files and a relay class.
+    This Class Supports non-blocking multi-process threading, meaning, can be started along side other processes
+    for near-realtime control of individual relays
+
+    Attributes
+    ----------
+    status: bool
+        Relay id
+    default_config : dict
+        Name of the relay
+    config_file : str
+        Pin attributed to relay
+    saved_config : dict
+        State of the relay (ON or OFF)
+    relay_dict : dict
+        Refresh rate of state check
+    refresh_rate : str
+        location of the api_file
+    logger : logging.logger
+        logger object
+    thread : threading.thread
+        thread object
+
+    Methods
+    -------
+    _load_config():
+        Prints the person's name and age.
+    _load_relay_objects():
+        Prints the person's name and age.
+    _update_relay_states():
+        Prints the person's name and age.
+    _safe_stop_all_relays():
+        Prints the person's name and age.
+    update_config_file:
+        Prints the person's name and age.
+    force_quit():
+        Prints the person's name and age.
+    stop():
+        Prints the person's name and age.
+    @threaded
+    def start():
+        Prints the person's name and age.
+    """
+
     def __init__(self,config_file, default_config = default_relay_config , refresh_rate = 1, log_file = './logs/system.log'):
+        """
+        Constructs all the necessary attributes for the BulkUpdater object.
+
+        Parameters
+        ----------
+            config_file : str(.json)
+                string containing the Configuation file location with relay parameters
+            default_config : dict
+                dictionary with the default relay configuration in case of no file existing or corrupt
+            refresh_rate : int
+                frequency of refreshing
+            log_file : str
+                location for logging the file
+        """
+
         self.status = False
         self.default_config = default_config
         self.config_file = config_file
@@ -232,95 +288,95 @@ class BulkUpdater():
         self.refresh_rate = refresh_rate
         self.relay_dict = self.load_relay_objects()
         self.logger = setup_logger(name=str(__name__)+"_status_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
+        self.thread = None
 
     @property
     def status(self):
-        '''
-        '''
+        """Return the status of bulk updater."""
         return self._status
 
     @status.setter
     def status(self, value):
-        '''
-        '''
+        """Set the status of the bulk updater."""
+        if not isinstance(value, bool):
+            raise TypeError("Status must be type bool")
         self._status = value
 
     @property
     def default_config(self):
-        '''
-        '''
+        """Return the default configuration bulk updater."""
         return self._default_config
 
     @default_config.setter
     def default_config(self, value):
-        '''
-        '''
+        """Set the default configuration of the bulk updater."""
+        if not isinstance(value, dict):
+            raise TypeError("Status must be type dictionary")
         self._default_config = value
+
     @property
     def config_file(self):
-        '''
-        '''
+        """Return the configuration file used in the bulk updater."""
         return self._config_file
 
     @config_file.setter
     def config_file(self, value):
-        '''
-        '''
+        """Set the default configuration of the bulk updater."""
+        if not isinstance(value, str):
+            raise TypeError("config file must be string and json file")
         self._config_file = value
-
 
     @property
     def saved_config(self):
-        '''
-        '''
+        """Return the latest state dictionary of bulk updater."""
         return self._saved_config
 
     @saved_config.setter
     def saved_config(self, value):
-        '''
-        '''
+        """Set the saved configuration parameter of the bulk updater."""
+        if not isinstance(value, dict):
+            raise TypeError("saved configuration must be a dictionary")
         self._saved_config = value
 
     @property
     def relay_dict(self):
-        '''
-        '''
+        """Return the dictionary of relay objects of bulk updater."""
         return self._relay_dict
 
     @relay_dict.setter
     def relay_dict(self, value):
-        '''
-        '''
+        """Set the dictionary of relays of the bulk updater."""
+        if not isinstance(value, dict):
+            raise TypeError("saved configuration must be a dictionary")
         self._relay_dict = value
 
     @property
     def refresh_rate(self):
-        '''
-        '''
+        """Return the refresh rate of bulk updater."""
         return self._refresh_rate
 
     @refresh_rate.setter
     def refresh_rate(self, value):
-        '''
-        '''
+        """Set the refresh rate of the bulk updater."""
+        if not isinstance(value, int):
+            raise TypeError("refresh rate must be an integer value")
         self._refresh_rate = value
 
     @property
     def logger(self):
-        '''
-        '''
+        """Return the logger object bulk updater."""
         return self._logger
 
     @logger.setter
     def logger(self, value):
-        '''
-        '''
+        """Set the refresh rate of the bulk updater."""
+        if not isinstance(value, logging.logger):
+            raise TypeError("logger must be a logger object")
         self._logger = value
 
     def load_config(self):
-        '''
-        return results: dictionary
-        '''
+        """load congiguration onto saved_config parameter"""
+
         try:
             if os.path.isfile(self.config_file):
                 try:
@@ -342,86 +398,74 @@ class BulkUpdater():
                 with open(self.config_file, "w") as f:
                     f.write(json.dumps(result, indent=4))
                 print(f'Relay config file not found, creating a default file with default parameters: {self.config_file}')
-
             self.saved_config = result
-            return result
-
         except:
             print(f'Major Error, config file could not be loaded')
             exit()
 
-
     def load_relay_objects(self):
-        '''
-        '''
+        """load configuration and load relay obects"""
+
         try:
             self.load_config()
-
             relay_objects = {}
-
             for relay_id, relay_properties in self.saved_config.items():
-
                 relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate)
-
                 relay_objects[relay_id] = relay
-
             self.relay_dict = relay_objects
-
             print('Relay objects instantiated and loaded')
-
             return relay_objects
-
         except:
             print('Major Error relay objects could not be loaded')
             exit()
 
     def update_relay_states(self):
-        '''
-        '''
+        """load config, update the states of the relay obects"""
+
         try:
             self.load_config()
-
             for relay_id, relay in self.relay_dict.items():
-
                 if self.saved_config[relay_id]['name'] != relay.name:
                     relay.name = self.saved_config[relay_id]['name']
                 else:
                     pass
-
                 if self.saved_config[relay_id]['pin'] != relay.pin:
                     relay.pin = self.saved_config[relay_id]['pin']
                 else:
                     pass
-
                 if self.saved_config[relay_id]['state'] != relay.state:
                     relay.state = self.saved_config[relay_id]['state']
                 else:
                     pass
-
                 if not relay.thread.is_alive():
                     relay.thread = relay.start()
                 else:
                     pass
-
                 relay.push_to_api()
-
                 self.logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
-
         except:
             self.logger.info('Major Error in updating')
             exit()
 
     def update_config_file(self, relay_id, state = False):
-        '''
-        '''
+        """
+        Updates the configuration
+
+        Parameters
+        ----------
+        relay_id: str
+            id of the relay, which the state will be changed
+        state: bool
+            state of he relay that will be changed in the config file
+        Returns
+        -------
+        None
+        """
         try:
             self.load_config()
-
             self.saved_config[relay_id]['state'] = state
-
             with open(self.config_file, "w") as f:
                 f.write(json.dumps(self.saved_config, indent=4))
-
             state_string = ' OFF' if state==False else ' ON' if state ==True else ' ?'
             print(f'Successful changed relay {relay_id} {state_string} in config file: {self.config_file}')
         except:
@@ -429,22 +473,16 @@ class BulkUpdater():
             exit()
 
     def safe_stop_all_relays(self):
-        '''
-        '''
+        """safely stop each relay in the dictionary used in the bulk updater"""
         self.status = False
-
         for relay_id, relay in self.relay_dict.items():
             self.update_config_file(relay_id = relay_id, state = False)
-
         self.update_relay_states()
-
         time.sleep(10)
-
         print('Safely stopped all relays')
 
     def force_quit(self):
-        '''
-        '''
+        """Force stop operation when all else fails"""
         print('Force Quit!')
         if os.path.exists(self.config_file):
             os.remove(self.config_file)
@@ -457,20 +495,15 @@ class BulkUpdater():
 
     @threaded
     def start(self):
-        '''
-        '''
-
+        """Return a thread and start the non-blocking parallel relay thread controlling updating the state of the relay and connecting  based on its attributes"""
         self.status = True
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
-
         try:
             while self.status:
                 self.update_relay_states()
                 time.sleep(self.refresh_rate)
-
             self.safe_stop_all_relays()
-
         except:
             try:
                 self.safe_stop_all_relays()
@@ -480,15 +513,13 @@ class BulkUpdater():
             exit()
 
     def stop(self):
-        '''
-        '''
+        """set the BulkUpdater status to False thus stopping the updater process"""
         self.status = False
 
 ########################################################### Main Function
 if __name__ == '__main__':
     control_box = BulkUpdater(config_file = './relay_config.json', default_config = default_relay_config , refresh_rate = 1)
     control_box.start()
-
 
     ######### You can put any code because this function is non-blocking
     try:
