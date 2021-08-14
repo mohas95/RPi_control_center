@@ -160,9 +160,8 @@ class Relay():
     @logger.setter
     def logger(self, value):
         """Set the logger of the relay."""
-        print(type(value))
-        if not instance(value, logging.Logger()):
-            raise TypeError("refresh rate must be an integer value")
+        # if not instance(value, logging.Logger:
+        #     raise TypeError("refresh rate must be an integer value")
         self._logger = value
 
     @property
@@ -372,9 +371,9 @@ class BulkUpdater():
 
     @logger.setter
     def logger(self, value):
-        """Set the refresh rate of the bulk updater."""
-        if not isinstance(value, logging.logger):
-            raise TypeError("logger must be a logger object")
+        """Set the logger of the bulk updater."""
+        # if not isinstance(value, logging.logger):
+        #     raise TypeError("logger must be a logger object")
         self._logger = value
 
     def load_config(self):
