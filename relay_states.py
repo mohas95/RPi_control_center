@@ -160,8 +160,8 @@ class Relay():
     @logger.setter
     def logger(self, value):
         """Set the logger of the relay."""
-        # if not instance(value, logging.logger):
-        #     raise TypeError("refresh rate must be an integer value")
+        if not instance(value, logging.logger()):
+            raise TypeError("refresh rate must be an integer value")
         self._logger = value
 
     @property
