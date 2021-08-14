@@ -284,7 +284,7 @@ class BulkUpdater():
         self.status = False
         self.default_config = default_config
         self.config_file = config_file
-        self.saved_config = None
+        self.saved_config = {}
         self.refresh_rate = refresh_rate
         self.relay_dict = self.load_relay_objects()
         self.logger = setup_logger(name=str(__name__)+"_status_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
@@ -334,8 +334,8 @@ class BulkUpdater():
     @saved_config.setter
     def saved_config(self, value):
         """Set the saved configuration parameter of the bulk updater."""
-        # if not isinstance(value, dict):
-        #     raise TypeError("saved configuration must be a dictionary")
+        if not isinstance(value, dict):
+            raise TypeError("saved configuration must be a dictionary")
         self._saved_config = value
 
     @property
@@ -408,6 +408,7 @@ class BulkUpdater():
 
         try:
             self.load_config()
+            print('poop')
             relay_objects = {}
             for relay_id, relay_properties in self.saved_config.items():
                 relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate)
