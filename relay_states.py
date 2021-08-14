@@ -387,20 +387,20 @@ class BulkUpdater():
                         result = self.saved_config
                         with open(self.config_file, "w") as f:
                             f.write(json.dumps(result, indent=4))
-                        print(f'Error, currupt relay config file, loading the last saved configuration: {self.config_file}')
+                        self.logger.warning(f'Error, currupt relay config file, loading the last saved configuration: {self.config_file}')
                     else:
                         result = self.default_config
                         with open(self.config_file, "w") as f:
                             f.write(json.dumps(result, indent=4))
-                        print(f'Error, currupt relay config file, could not get last known state creating a default file with default parameters: {self.config_file}')
+                        self.logger.warning(f'Error, currupt relay config file, could not get last known state creating a default file with default parameters: {self.config_file}')
             else:
                 result = self.default_config
                 with open(self.config_file, "w") as f:
                     f.write(json.dumps(result, indent=4))
-                print(f'Relay config file not found, creating a default file with default parameters: {self.config_file}')
+                self.logger.warning(f'Relay config file not found, creating a default file with default parameters: {self.config_file}')
             self.saved_config = result
         except:
-            print(f'Major Error, config file could not be loaded')
+            self.logger.error(f'Major Error, config file could not be loaded')
             exit()
 
     def load_relay_objects(self):
@@ -413,10 +413,10 @@ class BulkUpdater():
                 relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate)
                 relay_objects[relay_id] = relay
             self.relay_dict = relay_objects
-            print('Relay objects instantiated and loaded')
+            self.logger.info('Relay objects instantiated and loaded')
             return relay_objects
         except:
-            print('Major Error relay objects could not be loaded')
+            self.logger.error('Major Error relay objects could not be loaded')
             exit()
 
     def update_relay_states(self):
@@ -467,9 +467,9 @@ class BulkUpdater():
             with open(self.config_file, "w") as f:
                 f.write(json.dumps(self.saved_config, indent=4))
             state_string = ' OFF' if state==False else ' ON' if state ==True else ' ?'
-            print(f'Successful changed relay {relay_id} {state_string} in config file: {self.config_file}')
+            self.logger.info(f'Successful changed relay {relay_id} {state_string} in config file: {self.config_file}')
         except:
-            print(f'Major Error could not relay {relay_id} {state_string} in config file: {self.config_file}')
+            self.logger.error(f'Major Error could not update relay {relay_id} {state_string} in config file: {self.config_file}')
             exit()
 
     def safe_stop_all_relays(self):
@@ -480,16 +480,16 @@ class BulkUpdater():
             self.update_config_file(relay_id = relay_id, state = False)
         self.update_relay_states()
         time.sleep(10)
-        print('Safely stopped all relays')
+        self.logger.info('Safely stopped all relays')
 
     def force_quit(self):
         """Force stop operation when all else fails"""
 
-        print('Force Quit!')
+        self.logger.warning('Force Quit!')
         if os.path.exists(self.config_file):
             os.remove(self.config_file)
         else:
-            print("The file does not exist")
+            self.logger.warning("The file does not exist")
         self.load_config()
         GPIO.cleanup()
         exit()
@@ -511,7 +511,7 @@ class BulkUpdater():
                 self.safe_stop_all_relays()
             except:
                 self.force_quit()
-            print('Error, Stopping the relay processes')
+            self.logger.warning('Error, Stopping the relay processes')
             exit()
 
     def stop(self):
