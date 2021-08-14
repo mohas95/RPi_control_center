@@ -284,7 +284,7 @@ class BulkUpdater():
         self.status = False
         self.default_config = default_config
         self.config_file = config_file
-        self.saved_config = None
+        self.saved_config = {}
         self.refresh_rate = refresh_rate
         self.relay_dict = self.load_relay_objects()
         self.logger = setup_logger(name=str(__name__)+"_status_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
@@ -474,7 +474,7 @@ class BulkUpdater():
 
     def safe_stop_all_relays(self):
         """safely stop each relay in the dictionary used in the bulk updater"""
-        
+
         self.status = False
         for relay_id, relay in self.relay_dict.items():
             self.update_config_file(relay_id = relay_id, state = False)
