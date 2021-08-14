@@ -102,7 +102,7 @@ class Relay():
     @id.setter
     def id(self, value):
         """Set the id string of the relay."""
-        self._id = str(value)
+        self._id = value
 
     @property
     def name(self):
@@ -112,7 +112,7 @@ class Relay():
     @name.setter
     def name(self, value):
         """Set the name string of the relay."""
-        self._name = str(value)
+        self._name = value
 
     @property
     def pin(self):
