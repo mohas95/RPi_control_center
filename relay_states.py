@@ -176,19 +176,20 @@ class Relay():
 
     def push_to_api(self, custom_api_file = None):
         """Takes the api file attribute or custum api_file and pushes the state and attributes of the relay to the file"""
+
         if custom_api_file:
             self.api_file = custom_api_file
         else:
             self.api_file = './api/relay'+self.id +'_'+str(self.pin)+ '.json'
         timestamp = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
         data = {"relay_id":self.id, "name":self.name,"pin":self.pin, "status":self.state, "last updated":timestamp}
-
         with open(self.api_file, "w") as f:
             f.write(json.dumps(data, indent=4))
 
     @threaded
     def start(self):
         """Return a thread and start the non-blocking parallel relay thread controlling physical state of the relay based on its attributes"""
+
         success = False
         while self.state:
             try:
@@ -247,22 +248,22 @@ class BulkUpdater():
     Methods
     -------
     _load_config():
-        Prints the person's name and age.
+        load configuration from configuration file.
     _load_relay_objects():
-        Prints the person's name and age.
+        load relay object into dictionary
     _update_relay_states():
-        Prints the person's name and age.
+        Update the states of each relay to corresponiding config file.
     _safe_stop_all_relays():
-        Prints the person's name and age.
-    update_config_file:
-        Prints the person's name and age.
+        saftley detach each relay.
+    update_config_file(relay_id, state):
+        Update the configuration file of a particular id of a relay with a given state.
     force_quit():
-        Prints the person's name and age.
+        forcibly stops relays via gpio cleanup & reset congig file.
     stop():
-        Prints the person's name and age.
+        stop BulkUpdater process.
     @threaded
     def start():
-        Prints the person's name and age.
+        start BulkUpdater  process thread.
     """
 
     def __init__(self,config_file, default_config = default_relay_config , refresh_rate = 1, log_file = './logs/system.log'):
@@ -280,7 +281,6 @@ class BulkUpdater():
             log_file : str
                 location for logging the file
         """
-
         self.status = False
         self.default_config = default_config
         self.config_file = config_file
@@ -474,6 +474,7 @@ class BulkUpdater():
 
     def safe_stop_all_relays(self):
         """safely stop each relay in the dictionary used in the bulk updater"""
+        
         self.status = False
         for relay_id, relay in self.relay_dict.items():
             self.update_config_file(relay_id = relay_id, state = False)
@@ -483,12 +484,12 @@ class BulkUpdater():
 
     def force_quit(self):
         """Force stop operation when all else fails"""
+
         print('Force Quit!')
         if os.path.exists(self.config_file):
             os.remove(self.config_file)
         else:
             print("The file does not exist")
-
         self.load_config()
         GPIO.cleanup()
         exit()
@@ -496,6 +497,7 @@ class BulkUpdater():
     @threaded
     def start(self):
         """Return a thread and start the non-blocking parallel relay thread controlling updating the state of the relay and connecting  based on its attributes"""
+
         self.status = True
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
