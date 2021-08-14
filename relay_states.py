@@ -91,8 +91,11 @@ class Relay():
         self.state = state
         self.refresh_rate = refresh_rate
         self.api_file = './api/relay'+self.id +'_'+str(self.pin)+'.json'
+        print('tits')
         self.logger = setup_logger(name=str(__name__)+"_process_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
+        print('tits2')
         self.thread = self.start()
+        print('tits3')
 
     @property
     def id(self):
