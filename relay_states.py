@@ -408,9 +408,10 @@ class BulkUpdater():
 
         try:
             self.load_config()
-            print('poop')
             relay_objects = {}
+            print('poop')
             for relay_id, relay_properties in self.saved_config.items():
+                print('poop1')
                 relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate)
                 relay_objects[relay_id] = relay
             self.relay_dict = relay_objects
