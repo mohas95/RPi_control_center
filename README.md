@@ -58,11 +58,11 @@
 ## Issues
 - MQTT communication for UI control
 - add liscence
-- Nonblocking starting functionality for module
-- error handling
 
 ### resolved
 - Service file
 - json files for api
 - Logging over print statements (log files)
 - Turn this into a class structure for replicability/ abstraction (objectify)
+- Nonblocking starting functionality for module
+- error handling
