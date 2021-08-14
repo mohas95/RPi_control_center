@@ -161,7 +161,7 @@ class Relay():
     def logger(self, value):
         """Set the logger of the relay."""
         print(type(value))
-        if not instance(value, logging.logger()):
+        if not instance(value, logging.Logger:
             raise TypeError("refresh rate must be an integer value")
         self._logger = value
 
