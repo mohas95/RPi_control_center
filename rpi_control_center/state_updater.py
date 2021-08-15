@@ -66,7 +66,7 @@ class Relay():
         Prints the person's name and age.
     """
 
-    def __init__(self, id, name, pin, state=False, refresh_rate = 1, api_dir ='./api/', log_file = './logs/process.log'):
+    def __init__(self, id, name, pin, state=False, refresh_rate = 1, api_dir ='./api/', log_dir = './logs/'):
         """
         Constructs all the necessary attributes for the Relay object.
 
@@ -85,6 +85,12 @@ class Relay():
             log_file : str
                 location of logfile
         """
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+        log_file = log_dir + 'process.log'
+
+
         self.id = id
         self.name = name
         self.pin = pin
@@ -266,7 +272,7 @@ class BulkUpdater():
         start BulkUpdater  process thread.
     """
 
-    def __init__(self,config_file, default_config = default_relay_config , refresh_rate = 1, log_file = './logs/system.log'):
+    def __init__(self,config_file, default_config = default_relay_config , refresh_rate = 1, log_dir = './logs/'):
         """
         Constructs all the necessary attributes for the BulkUpdater object.
 
@@ -281,6 +287,11 @@ class BulkUpdater():
             log_file : str
                 location for logging the file
         """
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+        log_file = log_dir + 'system.log'
+
         self.status = False
         self.default_config = default_config
         self.config_file = config_file
@@ -288,6 +299,7 @@ class BulkUpdater():
         self.refresh_rate = refresh_rate
         self.logger = setup_logger(name=str(__name__)+"_status_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
         self.relay_dict = self.load_relay_objects()
+        self.log_dir = log_dir
         self.thread = None
 
     @property
@@ -374,6 +386,18 @@ class BulkUpdater():
         #     raise TypeError("logger must be a logger object")
         self._logger = value
 
+    @property
+    def log_dir(self):
+        """Return the log directory bulk updater."""
+        return self._log_dir
+
+    @log_dir.setter
+    def log_dir(self, value):
+        """Set the log directory the bulk updater."""
+        # if not isinstance(value, logging.logger):
+        #     raise TypeError("logger must be a logger object")
+        self._log_dir = value
+
     def load_config(self):
         """load congiguration onto saved_config parameter"""
 
@@ -410,7 +434,7 @@ class BulkUpdater():
             self.load_config()
             relay_objects = {}
             for relay_id, relay_properties in self.saved_config.items():
-                relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate)
+                relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate, log_dir=self.log_dir)
                 relay_objects[relay_id] = relay
             self.relay_dict = relay_objects
             self.logger.info('Relay objects instantiated and loaded')
