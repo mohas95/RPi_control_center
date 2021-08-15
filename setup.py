@@ -5,23 +5,24 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="RPI-control-center",
-    version="0.0.1",
+    version="0.0.2",
     author="Mohamed Debbagh",
     author_email="moha7108@protonmail.com",
     description="Python library for interfacing Raspberry pi with connected relays/Actuator in a non-blocking multiprocess threading manor",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://gitlab.com/moha7108/3-channel-control",
+    url="https://gitlab.com/moha7108/rpi-control-center",
     project_urls={
-        "Bug Tracker": "https://gitlab.com/moha7108/3-channel-control/README.md",
+        "Bug Tracker": "https://gitlab.com/moha7108/rpi-control-center/README.md",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU GPLv3",
-        "Operating System :: Raspbian GNU/Linux 10 (buster)",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "Operating System :: Other OS",
+        "Development Status :: 2 - Pre-Alpha",
     ],
-    package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src"),
+    license='GNU GPLv3',
+    packages=['rpi_control_center'],
     python_requires=">=3.6",
     install_requires=[
           'logzero',
