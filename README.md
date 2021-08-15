@@ -1,4 +1,4 @@
-# 3 channel control
+# RPI Control Center
 
 ## Raspberry Drivers and library setup
 
@@ -57,7 +57,6 @@
 
 ## Issues
 - MQTT communication for UI control
-- add liscence
 
 ### resolved
 - Service file
@@ -66,3 +65,4 @@
 - Turn this into a class structure for replicability/ abstraction (objectify)
 - Nonblocking starting functionality for module
 - error handling
+- add liscence
