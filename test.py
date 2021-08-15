@@ -11,4 +11,5 @@ if __name__ == '__main__':
             print('test')
             time.sleep(5)
     except:
+        print('hit')
         control_box.stop()
