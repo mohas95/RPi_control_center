@@ -66,7 +66,7 @@ class Relay():
         Prints the person's name and age.
     """
 
-    def __init__(self, id, name, pin, state=False, refresh_rate = 1, log_file = './logs/process.log'):
+    def __init__(self, id, name, pin, state=False, refresh_rate = 1, api_dir ='./api/' log_file = './logs/process.log'):
         """
         Constructs all the necessary attributes for the Relay object.
 
@@ -90,7 +90,7 @@ class Relay():
         self.pin = pin
         self.state = state
         self.refresh_rate = refresh_rate
-        self.api_file = './api/relay'+self.id +'_'+str(self.pin)+'.json'
+        self.api_file = api_dir+'relay'+self.id +'_'+str(self.pin)+'.json'
         self.logger = setup_logger(name=str(__name__)+"_process_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
         self.thread = self.start()
 
