@@ -1,5 +1,5 @@
 import time
-from rpi_control_center_pkg import state_updater as su
+from rpi_control_center import state_updater as su
 
 
 if __name__ == '__main__':
