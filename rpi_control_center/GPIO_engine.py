@@ -555,6 +555,15 @@ class BulkUpdater():
 
 ########################################################### Main Function
 if __name__ == '__main__':
+
+    # Default configuration for a 3 channel relay, this can be modified for whatever you want the default state to be
+    default_relay_config = {
+            "1":{'name':'name1', 'pin':26, 'state':False},
+            "2":{'name':'name2', 'pin':20, 'state':False},
+            "3":{'name':'name3', 'pin':21, 'state':False},
+    }
+
+    
     control_box = BulkUpdater(config_file = './relay_config.json', default_config = default_relay_config , refresh_rate = 1)
     control_box.start()
 
