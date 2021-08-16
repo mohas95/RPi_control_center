@@ -99,7 +99,7 @@ class Relay():
         self.pin = pin
         self.state = state
         self.refresh_rate = refresh_rate
-        self.api_file = api_dir+'relay'+self.id +'_'+str(self.pin)+'.json'
+        self.api_file = api_dir+self.id +'_'+str(self.pin)+'.json'
         self.logger = setup_logger(name= __name__+ "_process_logger", logfile=log_file, level=10 if debug_mode else 20, formatter = formatter, maxBytes=2e6, backupCount=3)
         self.thread = self.start()
 
@@ -184,12 +184,12 @@ class Relay():
         self._api_file = value
 
     def push_to_api(self, custom_api_file = None):
-        """Takes the api file attribute or custum api_file and pushes the state and attributes of the relay to the file"""
+        """Takes the api file attribute or custum api_file and pushes the state and attributes of the GPIO to the file"""
 
         if custom_api_file:
             self.api_file = custom_api_file
         else:
-            self.api_file = './api/relay'+self.id +'_'+str(self.pin)+ '.json'
+            self.api_file = './api/ID'+self.id +'_'+str(self.pin)+ '.json'
         timestamp = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
         data = {"relay_id":self.id, "name":self.name,"pin":self.pin, "status":self.state, "last updated":timestamp}
         with open(self.api_file, "w") as f:
@@ -498,7 +498,7 @@ class BulkUpdater():
         relay_id: str
             id of the relay, which the state will be changed
         state: bool
-            state of he relay that will be changed in the config file
+            state of the relay that will be changed in the config file
         Returns
         -------
         None
