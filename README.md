@@ -72,7 +72,7 @@ except:
 }
 ```
 
-- API file _(json file that is constantly update with the status of a certain pin)_
+- API file _(json file that is constantly updated with the status of a certain pin)_
 ```json
 {
     "id": "1",

@@ -275,7 +275,7 @@ class BulkUpdater():
         start BulkUpdater  process thread.
     """
 
-    def __init__(self,config_file, default_config = default_relay_config , refresh_rate = 1, log_dir = './logs/'):
+    def __init__(self,config_file, default_config = default_relay_config , refresh_rate = 1, log_dir = './logs/', api_dir = './api/'):
         """
         Constructs all the necessary attributes for the BulkUpdater object.
 
@@ -287,8 +287,10 @@ class BulkUpdater():
                 dictionary with the default relay configuration in case of no file existing or corrupt
             refresh_rate : int
                 frequency of refreshing
-            log_file : str
+            log_dir : str
                 location for logging the file
+            api_dir : str
+                location for logging the api file
         """
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
@@ -300,6 +302,7 @@ class BulkUpdater():
         self.config_file = config_file
         self.saved_config = {}
         self.refresh_rate = refresh_rate
+        self.api_dir = api_dir
         self.log_dir = log_dir
         self.logger = setup_logger(name=__name__+"_status_logger", logfile=log_file, level=10 if debug_mode else 20, formatter = formatter, maxBytes=2e6, backupCount=3)
         self.relay_dict = self.load_relay_objects()
@@ -397,9 +400,21 @@ class BulkUpdater():
     @log_dir.setter
     def log_dir(self, value):
         """Set the log directory the bulk updater."""
-        # if not isinstance(value, logging.logger):
-        #     raise TypeError("logger must be a logger object")
+        if not isinstance(value, str):
+            raise TypeError("log directory must be an string value")
         self._log_dir = value
+
+    @property
+    def api_dir(self):
+        """Return the api directory bulk updater."""
+        return self._api_dir
+
+    @api_dir.setter
+    def api_dir(self, value):
+        """Set the api directory the bulk updater."""
+        if not isinstance(value, str):
+            raise TypeError("api directory must be an string value")
+        self._api_dir = value
 
     def load_config(self):
         """load congiguration onto saved_config parameter"""
@@ -437,7 +452,7 @@ class BulkUpdater():
             self.load_config()
             relay_objects = {}
             for relay_id, relay_properties in self.saved_config.items():
-                relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate, log_dir=self.log_dir)
+                relay = Relay(id = relay_id,name = relay_properties['name'], pin=relay_properties['pin'], state = relay_properties['state'], refresh_rate = self.refresh_rate,api_dir = self.api_dir, log_dir=self.log_dir)
                 relay_objects[relay_id] = relay
             self.relay_dict = relay_objects
             self.logger.info('Relay objects instantiated and loaded')
