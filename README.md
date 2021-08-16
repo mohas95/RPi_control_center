@@ -1,6 +1,6 @@
 This package provides an abstraction layer and API engine for the [RPi.GPIO](https://pypi.org/project/RPi.GPIO/) package for python, which allows for multi-process and **non-blocking** control of GPIO pins.
 With this package you can start the GPIO Engine, and control the output pins for relay control/ actuation using a json configuration files, while your code performs other
-operations. This allows for relative _real time control*_ of the GPIO pins(~<1s scale). This package also provides real-time api of the status for external logging or
+operations. This allows for relative __real time control<sup>*</sup>__ of the GPIO pins(~<1s scale). This package also provides real-time api of the status for external logging or
 communication.Using the JSON protocol for the api we can allow for user control and information logging. For now this package only handles GPIO output but will feature
 input control in the near future.
 
