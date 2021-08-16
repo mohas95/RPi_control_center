@@ -11,7 +11,11 @@ python's garbage collection. For now refresh rate is by default set to 1 second 
 - [GitLab](https://gitlab.com/moha7108/rpi-control-center)
 
 
-
+## Installation
+- from pip
+```shell
+pip install rpi_control_center
+```
 
 ## Example Usage
 
