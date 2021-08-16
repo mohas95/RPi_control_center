@@ -87,6 +87,8 @@ class Relay():
         """
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
+        if not os.path.exists(log_dir):
+            os.makedirs(api_dir)
 
         log_file = log_dir + 'process.log'
 
@@ -468,7 +470,7 @@ class BulkUpdater():
                 relay.push_to_api()
                 self.logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
         except:
-            self.logger.info('Major Error in updating')
+            self.logger.error('Major Error in updating')
             exit()
 
     def update_config_file(self, relay_id, state = False):
