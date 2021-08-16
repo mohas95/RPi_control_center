@@ -99,7 +99,7 @@ class Relay():
         self.state = state
         self.refresh_rate = refresh_rate
         self.api_file = api_dir+'relay'+self.id +'_'+str(self.pin)+'.json'
-        self.logger = setup_logger(name=str(__name__)+"_process_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
+        self.logger = setup_logger(name=str(__name__)+"_process_logger", logfile=log_file, level=20, formatter = formatter, maxBytes=2e6, backupCount=3)
         self.thread = self.start()
 
     @property
@@ -300,7 +300,7 @@ class BulkUpdater():
         self.saved_config = {}
         self.refresh_rate = refresh_rate
         self.log_dir = log_dir
-        self.logger = setup_logger(name=str(__name__)+"_status_logger", logfile=log_file, level=10, formatter = formatter, maxBytes=2e6, backupCount=3)
+        self.logger = setup_logger(name=str(__name__)+"_status_logger", logfile=log_file, level=20, formatter = formatter, maxBytes=2e6, backupCount=3)
         self.relay_dict = self.load_relay_objects()
         self.thread = None
 
