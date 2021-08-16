@@ -40,17 +40,17 @@ except:
 
 All kinds of feedback and contributions are welcome.
 
-- Create an issue
-Create a pull request
-@moha7108
+- [Create an issue](https://gitlab.com/moha7108/rpi-control-center/-/issues)
+- Create a pull request
+- reach out to @moha7108
 
 ## Contributors
 
 - Mohamed Debbagh
-  - [GitLab](http://google.com)
-  - [Github](http://google.com)
-  - [Twitter](http://google.com)
-  - [intsagram](http://google.com)
+  - [GitLab](https://gitlab.com/moha7108/)
+  - [Github](https://github.com/moha7108/)
+  - [Twitter](https://twitter.com/moha7108)
+  - [intsagram](https://www.instagram.com/moha7108/)
 
 
 ## Change Log
