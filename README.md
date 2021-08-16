@@ -10,7 +10,6 @@ python's garbage collection. For now refresh rate is by default set to 1 second 
 - Documentation: *Coming soon*
 - [GitLab](https://gitlab.com/moha7108/rpi-control-center)
 
-
 ## Installation
 
 - pip
@@ -39,7 +38,7 @@ default_relay_config = {
 control_box = GPIO_engine()
 control_box = BulkUpdater(
                             config_file = './relay_config.json',
-                            default_config = default_relay_config ,
+                            default_config = default_relay_config,
                             refresh_rate = 1
                           )
 control_box.start()
@@ -72,6 +71,18 @@ except:
     }
 }
 ```
+
+- API file _(json file that is constantly update with the status of a certain pin)_
+```json
+{
+    "id": "1",
+    "name": "name1",
+    "pin": 26,
+    "status": false,
+    "last updated": "2021/08/16 17:03:49"
+}
+```
+
 ## Hardware and drivers
 
 ### Hardware
