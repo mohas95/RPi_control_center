@@ -12,11 +12,16 @@ python's garbage collection. For now refresh rate is by default set to 1 second 
 
 
 ## Installation
-- from pip
+- pip
 ```shell
 pip install rpi_control_center
 ```
-
+- source
+```shell
+git clone https://gitlab.com/moha7108/rpi-control-center.git
+cd rpi-control-center
+pip install -r requirements.txt
+```
 ## Example Usage
 
 ```python
@@ -100,22 +105,11 @@ All kinds of feedback and contributions are welcome.
 - pip install numpy
 - pip install pandas
 
-## Hardware
-
+## Hardware and drivers
+### Hardware
 - Raspberrypi 3B+
-- waveshare 3 channel RPi Relay Board
 
-
-## Configuration and user control files
-### ./relay_config.json
-- this file will set status of the processes: PH up, PH Down, and PH Monitoring, this file can be modified directly but serves as a file that allows for user controls
-### ./system/relay-control.service
-- this file runs the relay-control script as a service file on linux OS
-- systemctl enable ~/relay-control/system/relay-control.service
-- systemctl start relay-control
-
-### ./logs/*
-- logs of the process as well as status operations
+### Hardware installation
 
 ## Issues
 - MQTT communication for UI control
