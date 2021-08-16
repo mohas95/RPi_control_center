@@ -51,7 +51,7 @@ except:
 ```
 
 ### Configuration/ API Files
-- pin configuration file _(ie. relay_config.json, this example is a 3 GPIO configuration)_
+- pin configuration file _(ie. relay_config.json, this example is a 3 GPIO pin configuration, once instantiated the state can be changed in the file and the change will be reflected in the gpio pin)_
 ```json
 {
     "1": {
