@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://gitlab.com/moha7108/rpi-control-center",
     project_urls={
-        "Bug Tracker": "https://gitlab.com/moha7108/rpi-control-center/README.md",
+        "Bug Tracker": "https://gitlab.com/moha7108/rpi-control-center/-/issues",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
