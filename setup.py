@@ -9,7 +9,7 @@ setuptools.setup(
     version="0.1.0",
     author="Mohamed Debbagh",
     author_email="moha7108@protonmail.com",
-    description="This package provides an abstraction layer and API engine for the RPi.GPIO package for python, which allows for multi-process and non-blocking control of GPIO pins."
+    description="This package provides an abstraction layer and API engine for the RPi.GPIO package for python, which allows for multi-process and non-blocking control of GPIO pins.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://gitlab.com/moha7108/rpi-control-center",
