@@ -31,14 +31,12 @@ import time
 from rpi_control_center import GPIO_engine
 
 control_box = GPIO_engine()
-
 control_box = BulkUpdater(
                             config_file = './relay_config.json',
                             default_config = default_relay_config ,
                             refresh_rate = 1
                           )
 control_box.start()
-
 ######### You can put any code because this function is non-blocking
 try:
     while True:
@@ -46,6 +44,28 @@ try:
 except:
     control_box.stop()
 ```
+
+### Configuration File
+- pin configuration file _(ie. relay_config.json, this example is a 3 GPIO configuration)_ 
+'''json
+{
+    "1": {
+        "name": "name1",
+        "pin": 26,
+        "state": false
+    },
+    "2": {
+        "name": "name2",
+        "pin": 20,
+        "state": false
+    },
+    "3": {
+        "name": "name3",
+        "pin": 21,
+        "state": false
+    }
+}
+'''
 ## Hardware and drivers
 
 ### Hardware
