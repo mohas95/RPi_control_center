@@ -18,9 +18,9 @@ default_relay_config = {
         "3":{'name':'name3', 'pin':21, 'state':False},
 }
 
-format = '%(color)s[%(levelname)1.1s %(asctime)s %(module)s:%(funcName)s %(thread)d]%(end_color)s %(message)s' # format for the logzero logger
+format = '%(color)s[%(levelname)1.1s %(asctime)s %(module)s	%(name)s :%(funcName)s %(thread)d]%(end_color)s %(message)s' # format for the logzero logger
 formatter = logzero.LogFormatter(fmt=format) # format object for logzero logger
-debug_mode = False
+debug_mode = False #debug mode for developers
 
 ########################################################### Wrapper/decorator definition function
 def threaded(func):
