@@ -191,7 +191,7 @@ class Relay():
         else:
             self.api_file = './api/ID'+self.id +'_'+str(self.pin)+ '.json'
         timestamp = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-        data = {"relay_id":self.id, "name":self.name,"pin":self.pin, "status":self.state, "last updated":timestamp}
+        data = {"id":self.id, "name":self.name,"pin":self.pin, "status":self.state, "last updated":timestamp}
         with open(self.api_file, "w") as f:
             f.write(json.dumps(data, indent=4))
 
