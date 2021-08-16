@@ -50,7 +50,7 @@ except:
     control_box.stop()
 ```
 
-### Configuration File
+### Configuration/ API Files
 - pin configuration file _(ie. relay_config.json, this example is a 3 GPIO configuration)_
 ```json
 {
