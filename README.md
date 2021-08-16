@@ -30,6 +30,12 @@ pip install -r requirements.txt
 import time
 from rpi_control_center import GPIO_engine
 
+default_relay_config = {
+        "1":{'name':'name1', 'pin':26, 'state':False},
+        "2":{'name':'name2', 'pin':20, 'state':False},
+        "3":{'name':'name3', 'pin':21, 'state':False},
+}
+
 control_box = GPIO_engine()
 control_box = BulkUpdater(
                             config_file = './relay_config.json',
