@@ -46,8 +46,8 @@ except:
 ```
 
 ### Configuration File
-- pin configuration file _(ie. relay_config.json, this example is a 3 GPIO configuration)_ 
-'''json
+- pin configuration file _(ie. relay_config.json, this example is a 3 GPIO configuration)_
+```json
 {
     "1": {
         "name": "name1",
@@ -65,7 +65,7 @@ except:
         "state": false
     }
 }
-'''
+```
 ## Hardware and drivers
 
 ### Hardware
