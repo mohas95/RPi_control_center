@@ -5,7 +5,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="RPI-control-center",
-    version="0.0.2",
+    keywords = 'Raspberry Pi, Raspi, Python, GPIO, API, non-blocking',
+    version="0.1.0",
     author="Mohamed Debbagh",
     author_email="moha7108@protonmail.com",
     description="This package provides an abstraction layer and API engine for the RPi.GPIO package for python, which allows for multi-process and non-blocking control of GPIO pins."
@@ -19,7 +20,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: POSIX :: Linux",
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 3 - Alpha",
     ],
     license='GNU GPLv3',
     packages=['rpi_control_center'],
@@ -28,5 +29,4 @@ setuptools.setup(
           'logzero',
           'RPi.GPIO'
       ],
-
 )

@@ -125,8 +125,8 @@ All kinds of feedback and contributions are welcome.
 ## Contributors
 
 - Mohamed Debbagh
-  - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108), [Intsagram](https://www.instagram.com/moha7108/)
-
+  - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108)
+  
 ## Change Log
 
 ### 0.1.0
