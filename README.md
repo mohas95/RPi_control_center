@@ -12,6 +12,7 @@ python's garbage collection. For now refresh rate is by default set to 1 second 
 
 
 ## Installation
+
 - pip
 ```shell
 pip install rpi_control_center
@@ -22,6 +23,7 @@ git clone https://gitlab.com/moha7108/rpi-control-center.git
 cd rpi-control-center
 pip install -r requirements.txt
 ```
+
 ## Example Usage
 
 ```python
@@ -44,39 +46,17 @@ try:
 except:
     control_box.stop()
 ```
-
-## Feedback
-
-All kinds of feedback and contributions are welcome.
-
-- [Create an issue](https://gitlab.com/moha7108/rpi-control-center/-/issues)
-- Create a pull request
-- reach out to @moha7108
-
-## Contributors
-
-- Mohamed Debbagh
-  - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108), [Intsagram](https://www.instagram.com/moha7108/)
-
-
-## Change Log
-
-### 0.1.0
--
--
--
--
-
-
 ## Hardware and drivers
 
 ### Hardware
 
-- Raspberrypi 3B+
+- [Raspberrypi 3B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+  - OS: Rasbian Buster +
 
 ### System Libraries
 
-[waveshare guide](https://www.waveshare.com/wiki/Libraries_Installation_for_RPi)]
+- [waveshare guide](https://www.waveshare.com/wiki/Libraries_Installation_for_RPi)]
+
 ``` shell
 cd
 sudo apt update
@@ -94,6 +74,29 @@ sudo apt install libtiff -y
 sudo apt install libtiff5 -y
 sudo apt-get install -y i2c-tools
 ```
+
+## Feedback
+
+All kinds of feedback and contributions are welcome.
+
+- [Create an issue](https://gitlab.com/moha7108/rpi-control-center/-/issues)
+- Create a pull request
+- Reach out to @moha7108
+
+## Contributors
+
+- Mohamed Debbagh
+  - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108), [Intsagram](https://www.instagram.com/moha7108/)
+
+
+## Change Log
+
+### 0.1.0
+-
+-
+-
+-
+
 ## Issues
 - MQTT communication for UI control
 
