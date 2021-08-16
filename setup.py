@@ -28,5 +28,5 @@ setuptools.setup(
     install_requires=[
           'logzero',
           'RPi.GPIO'
-      ],
+      ]
 )
