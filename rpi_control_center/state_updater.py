@@ -87,7 +87,7 @@ class Relay():
         """
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
-        if not os.path.exists(log_dir):
+        if not os.path.exists(api_dir):
             os.makedirs(api_dir)
 
         log_file = log_dir + 'process.log'
