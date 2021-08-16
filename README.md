@@ -55,7 +55,7 @@ except:
 
 ### System Libraries
 
-- [waveshare guide](https://www.waveshare.com/wiki/Libraries_Installation_for_RPi)]
+- [waveshare guide](https://www.waveshare.com/wiki/Libraries_Installation_for_RPi)
 
 ``` shell
 cd
@@ -88,23 +88,9 @@ All kinds of feedback and contributions are welcome.
 - Mohamed Debbagh
   - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108), [Intsagram](https://www.instagram.com/moha7108/)
 
-
 ## Change Log
 
 ### 0.1.0
--
--
--
--
-
-## Issues
-- MQTT communication for UI control
-
-### resolved
-- Service file
-- json files for api
-- Logging over print statements (log files)
-- Turn this into a class structure for replicability/ abstraction (objectify)
-- Nonblocking starting functionality for module
-- error handling
-- add liscence
+- Logging via logzero, ability to suppress debug level logs when debug_mode is off
+- create log and api folders when they do not exist
+- all previous versions are pre release, this is the first working release
