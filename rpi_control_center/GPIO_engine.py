@@ -12,11 +12,11 @@ from logzero import logger, setup_logger
 
 ########################################################### Global Variables
 # Default configuration for a 3 channel relay, this can be modified for whatever you want the default state to be
-default_relay_config = {
-        "1":{'name':'name1', 'pin':26, 'state':False},
-        "2":{'name':'name2', 'pin':20, 'state':False},
-        "3":{'name':'name3', 'pin':21, 'state':False},
-}
+# default_relay_config = {
+#         "1":{'name':'name1', 'pin':26, 'state':False},
+#         "2":{'name':'name2', 'pin':20, 'state':False},
+#         "3":{'name':'name3', 'pin':21, 'state':False},
+# }
 
 format = '%(color)s[%(levelname)1.1s %(asctime)s %(name)s :%(funcName)s %(thread)d]%(end_color)s %(message)s' # format for the logzero logger
 formatter = logzero.LogFormatter(fmt=format) # format object for logzero logger
@@ -275,7 +275,7 @@ class BulkUpdater():
         start BulkUpdater  process thread.
     """
 
-    def __init__(self,config_file, default_config = default_relay_config , refresh_rate = 1, log_dir = './logs/', api_dir = './api/'):
+    def __init__(self,config_file, default_config, refresh_rate = 1, log_dir = './logs/', api_dir = './api/'):
         """
         Constructs all the necessary attributes for the BulkUpdater object.
 
@@ -284,7 +284,7 @@ class BulkUpdater():
             config_file : str(.json)
                 string containing the Configuation file location with relay parameters
             default_config : dict
-                dictionary with the default relay configuration in case of no file existing or corrupt
+                dictionary with the default GPIO configuration in case of no file existing or corrupt
             refresh_rate : int
                 frequency of refreshing
             log_dir : str
