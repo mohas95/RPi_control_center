@@ -4,7 +4,7 @@ operations. This allows for relative _real time control*_ of the GPIO pins(~<1s 
 communication.Using the JSON protocol for the api we can allow for user control and information logging. For now this package only handles GPIO output but will feature
 input control in the near future.
 
-_*Note_ while this package provides multi-process control of the GPIO pins for near real-time control, jitter can vary considerably due to the nature of Linux OS and
+___*Note:___ while this package provides multi-process control of the GPIO pins for near real-time control, jitter can vary considerably due to the nature of Linux OS and
 python's garbage collection. For now refresh rate is by default set to 1 second to mitigate issue of jitter to a known scale, but we cannot guarantee performance if  refresh rate is set to 0.
 
 - Documentation: *Coming soon*
@@ -47,10 +47,7 @@ All kinds of feedback and contributions are welcome.
 ## Contributors
 
 - Mohamed Debbagh
-  - [GitLab](https://gitlab.com/moha7108/)
-  - [Github](https://github.com/moha7108/)
-  - [Twitter](https://twitter.com/moha7108)
-  - [intsagram](https://www.instagram.com/moha7108/)
+  - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108), [Intsagram](https://www.instagram.com/moha7108/)
 
 
 ## Change Log
