@@ -13,7 +13,7 @@ python's garbage collection. For now refresh rate is by default set to 1 second 
 
 
 
-##Example Usage
+## Example Usage
 
 ```python
 
