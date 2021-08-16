@@ -468,7 +468,7 @@ class BulkUpdater():
                 else:
                     pass
                 relay.push_to_api()
-                self.logger.info(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
+                self.logger.debug(f'Relay{relay_id}: Name[{relay.name}], Pin[{relay.pin}], state[{relay.state}]')
         except:
             self.logger.error('Major Error in updating')
             exit()
