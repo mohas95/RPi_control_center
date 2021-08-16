@@ -16,8 +16,16 @@ python's garbage collection. For now refresh rate is by default set to 1 second 
 ## Example Usage
 
 ```python
+import time
+from rpi_control_center import GPIO_engine
 
-control_box = BulkUpdater(config_file = './relay_config.json', default_config = default_relay_config , refresh_rate = 1)
+control_box = GPIO_engine()
+
+control_box = BulkUpdater(
+                            config_file = './relay_config.json',
+                            default_config = default_relay_config ,
+                            refresh_rate = 1
+                          )
 control_box.start()
 
 ######### You can put any code because this function is non-blocking
@@ -26,7 +34,6 @@ try:
         time.sleep(5)
 except:
     control_box.stop()
-
 ```
 
 ## Feedback
