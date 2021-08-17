@@ -12,9 +12,11 @@ setuptools.setup(
     description="This package provides an abstraction layer and API engine for the RPi.GPIO package for python, which allows for multi-process and non-blocking control of GPIO pins.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://gitlab.com/moha7108/rpi-control-center",
+    url="https://github.com/moha7108/RPi_control_center",
     project_urls={
-        "Bug Tracker": "https://gitlab.com/moha7108/rpi-control-center/-/issues",
+        "Bug Tracker": "https://github.com/moha7108/RPi_control_center/issues",
+        "Github": "https://github.com/moha7108/RPi_control_center",
+        "GitLab[Source]":"https://gitlab.com/moha7108/rpi-control-center"
     },
     classifiers=[
         "Programming Language :: Python :: 3",

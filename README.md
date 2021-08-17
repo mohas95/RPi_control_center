@@ -8,6 +8,7 @@ ___*Note:___ While this package provides multi-process control of the GPIO pins 
 python's garbage collection. For now refresh rate is by default set to 1 second to mitigate issue of jitter to a known scale, but we cannot guarantee performance if  refresh rate is set to 0.
 
 - Documentation: *Coming soon*
+- [Github](https://github.com/moha7108/RPi_control_center)
 - [GitLab](https://gitlab.com/moha7108/rpi-control-center)
 
 ## Installation
@@ -118,7 +119,7 @@ sudo apt-get install -y i2c-tools
 
 All kinds of feedback and contributions are welcome.
 
-- [Create an issue](https://gitlab.com/moha7108/rpi-control-center/-/issues)
+- [Create an issue](https://github.com/moha7108/RPi_control_center/issues)
 - Create a pull request
 - Reach out to @moha7108
 
@@ -126,9 +127,10 @@ All kinds of feedback and contributions are welcome.
 
 - Mohamed Debbagh
   - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108)
-  
-## Change Log
 
+## Change Log
+### 0.1.1
+- Change Issue host and documentation, functionally the same as previous version
 ### 0.1.0
 - Logging via logzero, ability to suppress debug level logs when debug_mode is off
 - create log and api folders when they do not exist
