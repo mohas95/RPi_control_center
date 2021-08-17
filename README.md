@@ -130,7 +130,9 @@ All kinds of feedback and contributions are welcome.
 
 ## Change Log
 ### 0.1.1
-- Change Issue host and documentation, functionally the same as previous version
+- Change host to github for better community issue tracking and documentation, functionally the same as previous version
+- gitlab will be used as a mirror
+
 ### 0.1.0
 - Logging via logzero, ability to suppress debug level logs when debug_mode is off
 - create log and api folders when they do not exist
