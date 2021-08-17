@@ -129,6 +129,7 @@ All kinds of feedback and contributions are welcome.
   - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108)
 
 ## Change Log
+
 ### 0.1.1
 - Change host to github for better community issue tracking and documentation, functionally the same as previous version
 - gitlab will be used as a mirror
