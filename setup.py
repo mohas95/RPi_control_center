@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup(
     name="RPI-control-center",
     keywords = 'Raspberry Pi, Raspi, Python, GPIO, API, non-blocking',
-    version="0.1.0",
+    version="0.1.1",
     author="Mohamed Debbagh",
     author_email="moha7108@protonmail.com",
     description="This package provides an abstraction layer and API engine for the RPi.GPIO package for python, which allows for multi-process and non-blocking control of GPIO pins.",
