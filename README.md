@@ -15,7 +15,7 @@ python's garbage collection. For now refresh rate is by default set to 1 second 
 
 - pip
 ```shell
-pip install rpi_control_center
+pip install RPI-control-center
 ```
 - source
 ```shell
