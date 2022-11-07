@@ -25,7 +25,7 @@ pip install -r requirements.txt
 ```
 
 ## Example Usage
-
+### GPIO Control Script
 ```python
 import time
 from rpi_control_center import GPIO_engine
@@ -85,6 +85,21 @@ except:
 }
 ```
 
+### USB Mass Storage Script
+```python
+import time, os
+from rpi_control_center import rpi_usb
+
+storage_devices = rpi_usb.get_devices(True)
+print(storage_devices)
+for dev in storage_devices:
+    dev('test.txt')
+    time.sleep(5)
+    os.system(f'sudo ls {dev.mnt}')
+    dev.umnt_usb()
+    os.system(f'sudo ls /mnt')
+```
+
 ## Hardware and drivers
 
 ### Hardware
@@ -129,6 +144,8 @@ All kinds of feedback and contributions are welcome.
 
 ## Change Log
 
+### 0.1.3
+- add rpi_sub module for usb mass storage handling
 ### 0.1.2
 - fix minor error in test and example code
 
