@@ -1,5 +1,5 @@
 import time
-from rpi_control_center import GPIO_engine
+from rpi_control_center import GPIO_engine, rpi_usb
 
 default_relay_config = {
         "1":{'name':'name1', 'pin':26, 'state':False},
