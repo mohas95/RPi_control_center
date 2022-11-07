@@ -92,6 +92,7 @@ from rpi_control_center import rpi_usb
 
 storage_devices = rpi_usb.get_devices(True)
 print(storage_devices)
+
 for dev in storage_devices:
     dev('test.txt')
     time.sleep(5)
