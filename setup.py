@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup(
     name="RPI-control-center",
     keywords = 'Raspberry Pi, Raspi, Python, GPIO, USB, Mass storage, API, non-blocking',
-    version="0.1.7",
+    version="0.1.8",
     author="Mohamed Debbagh",
     author_email="moha7108@protonmail.com",
     description="""This package provides additional suite of python based rpi abstraction for handling rpi hardware control.
