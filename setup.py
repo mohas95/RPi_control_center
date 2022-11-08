@@ -6,12 +6,12 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup(
     name="RPI-control-center",
     keywords = 'Raspberry Pi, Raspi, Python, GPIO, USB, Mass storage, API, non-blocking',
-    version="0.1.3",
+    version="0.1.4",
     author="Mohamed Debbagh",
     author_email="moha7108@protonmail.com",
     description="""This package provides additional suite of python based rpi abstraction for handling rpi hardware control.
                     The package currently includes an abstraction layer and API engine for the RPi.GPIO package for python, which allows for multi-process and non-blocking control of GPIO pins.
-                    The package also include a module for handling usb mass storage device mounting, data dumping, and unmounting.
+                    The package also include a module for handling usb mass storage device mounting, data dumping, and unmounting. Finally the Package also includes a module for common sensors.
                     """,
     long_description=long_description,
     long_description_content_type="text/markdown",

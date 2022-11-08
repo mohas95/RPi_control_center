@@ -144,12 +144,12 @@ All kinds of feedback and contributions are welcome.
   - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108)
 
 ## Change Log
-
+### 0.1.4
+- addition of rpi_monitors module for sensor interfacing (currently only DFRobot_BME680)
 ### 0.1.3
-- add rpi_sub module for usb mass storage handling
+- add rpi_usb module for usb mass storage handling
 ### 0.1.2
 - fix minor error in test and example code
-
 ### 0.1.1
 - Change host to github for better community issue tracking and documentation, functionally the same as previous version
 - gitlab will be used as a mirror
