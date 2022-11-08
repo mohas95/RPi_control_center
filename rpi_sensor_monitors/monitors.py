@@ -5,7 +5,6 @@ import time
 import os
 import os.path
 import sys
-
 ########################################################### Wrapper/decorator & Helper functions
 def threaded(func):
 	"""start and return a thread of the passed in function. Threadify a function with the @threaded decorator"""
@@ -195,7 +194,7 @@ class BME680():
 
 	def begin(self):
 		""""""
-		sensor = gravity.DFRobot_BME680()
+		sensor = DFRobot_BME680()
 		sensor.set_humidity_oversample(sensor.OS_2X) #Oversampling value: OS_NONE, OS_1X, OS_2X, OS_4X, OS_8X, OS_16X
 		sensor.set_pressure_oversample(sensor.OS_4X) #Oversampling value: OS_NONE, OS_1X, OS_2X, OS_4X, OS_8X, OS_16X
 		sensor.set_temperature_oversample(sensor.OS_8X) #Oversampling value: OS_NONE, OS_1X, OS_2X, OS_4X, OS_8X, OS_16X
