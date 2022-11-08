@@ -5,7 +5,7 @@ import time
 import os
 import os.path
 import sys
-from .gravity import *
+from .gravity import DFRobot_BME680, DFRobot_BME280
 ########################################################### Wrapper/decorator & Helper functions
 def threaded(func):
 	"""start and return a thread of the passed in function. Threadify a function with the @threaded decorator"""
