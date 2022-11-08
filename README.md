@@ -158,6 +158,7 @@ All kinds of feedback and contributions are welcome.
 ## Change Log
 ### 0.2.0
 - addition of rpi_monitors module for sensor interfacing (currently only DFRobot_BME680)
+- add dependancies (smbus, spidev)
 ### 0.1.3
 - add rpi_usb module for usb mass storage handling
 ### 0.1.2
