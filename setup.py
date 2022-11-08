@@ -27,7 +27,7 @@ setuptools.setup(
         "Development Status :: 3 - Alpha",
     ],
     license='GNU GPLv3',
-    packages=['rpi_control_center','rpi_sensor_monitors'],
+    packages=['rpi_control_center','rpi_sensor_monitors','rpi_sensor_monitors.gravity'],
     python_requires=">=3.6",
     install_requires=[
           'logzero',
