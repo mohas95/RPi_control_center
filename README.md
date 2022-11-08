@@ -101,6 +101,18 @@ for dev in storage_devices:
     os.system(f'sudo ls /mnt')
 ```
 
+### Sensor Monitoring
+```python
+from rpi_sensor_monitors import monitors
+
+
+env_sensor = monitors.BME680()
+env_sensor.start()
+time.sleep(60)
+env_sensor.stop()
+```
+
+
 ## Hardware and drivers
 
 ### Hardware
@@ -144,7 +156,7 @@ All kinds of feedback and contributions are welcome.
   - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108)
 
 ## Change Log
-### 0.1.9
+### 0.2.0
 - addition of rpi_monitors module for sensor interfacing (currently only DFRobot_BME680)
 ### 0.1.3
 - add rpi_usb module for usb mass storage handling
