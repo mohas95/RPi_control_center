@@ -1,8 +1,12 @@
+This package provides additional suite of python based rpi abstraction for handling rpi hardware and data control. The package currently includes an abstraction layer and API engine for the RPi.GPIO package for python, which allows for multi-process and non-blocking control of GPIO pins. The package also includes a module for handling usb mass storage device mounting, data dumping, and unmounting,and other data handling. Finally the Package also includes a module for common sensors.
+
 This package provides an abstraction layer and API engine for the [RPi.GPIO](https://pypi.org/project/RPi.GPIO/) package for python, which allows for multi-process and **non-blocking** control of GPIO pins.
 With this package you can start the GPIO Engine, and control the output pins for relay control/ actuation using a json configuration files, while your code performs other
 operations. This allows for relative __real time control<sup>*</sup>__ of the GPIO pins(~<1s scale). This package also provides real-time api of the status for external logging or
 communication.Using the JSON protocol for the api we can allow for user control and information logging. For now this package only handles GPIO output but will feature
 input control in the near future.
+
+
 
 ___*Note:___ While this package provides multi-process control of the GPIO pins for near real-time control, jitter can vary considerably due to the nature of Linux OS and
 python's garbage collection. For now refresh rate is by default set to 1 second to mitigate issue of jitter to a known scale, but we cannot guarantee performance if  refresh rate is set to 0.
@@ -125,7 +129,6 @@ env_sensor.start()
 time.sleep(60)
 env_sensor.stop()
 ```
-
 
 ## Hardware and drivers
 
