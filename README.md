@@ -101,6 +101,20 @@ for dev in storage_devices:
     os.system(f'sudo ls /mnt')
 ```
 
+### CSV Handling Script
+```python
+from rpi_control_center.data import csv_handler
+
+test_data = {'hello': 13, 'poop':'34013'}
+
+test_csv = csv_handler(filename='test_data')
+test_csv(test_data)
+
+print(test_csv.data_files)
+print(test_csv.writing_to)
+print(test_csv.total_size)
+```
+
 ### Sensor Monitoring
 ```python
 from rpi_sensor_monitors import monitors
@@ -156,6 +170,9 @@ All kinds of feedback and contributions are welcome.
   - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108)
 
 ## Change Log
+### 0.2.1
+- add data module with csv handler class to the rpi_control_center package
+-
 ### 0.2.0
 - addition of rpi_monitors module for sensor interfacing (currently only DFRobot_BME680)
 - add dependancies (smbus, spidev)
