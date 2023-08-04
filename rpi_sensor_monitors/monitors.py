@@ -8,6 +8,8 @@ import sys
 from .gravity import DFRobot_BME680, DFRobot_BME280
 import RPi.GPIO as GPIO
 
+timestamp_strformat = '%Y/%m/%d %H:%M:%S'
+
 ########################################################### Wrapper/decorator & Helper functions
 def threaded(func):
 	"""start and return a thread of the passed in function. Threadify a function with the @threaded decorator"""
@@ -216,7 +218,7 @@ class BME680():
 			sensor_data = { 'Temperature,C':self.sensor.data.temperature,
 							'Humidity,%RH': self.sensor.data.humidity,
 							'Pressure,hPa': self.sensor.data.pressure,
-							'timestamp': datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+							'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
 							}
 
 			self.sensor_readings = sensor_data
@@ -246,7 +248,7 @@ class BME680():
 		print(f'attempting to stop thread of {self.label}')
 
 
-class ultasonic():
+class ultrasonic():
 	def __init__(self, trig_out_pin, echo_in_pin, label='HC-SR04P' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
 		self.label = label
 		self.status = False
@@ -259,6 +261,14 @@ class ultasonic():
 		self.logger = None
 		self.thread = None
 
+	def set_thread(func):
+		"""Decorator Function in order to set the thread property of the object to the output of a function returning  a thread object"""
+		def wrapper(self):
+			self.thread = func(self)
+			print(f'thread object for {self.label} set as {self.thread}')
+			return self.thread
+		return wrapper
+
 	def begin(self):
 		"""
 		initialize and setup the sensor
@@ -270,20 +280,53 @@ class ultasonic():
 		GPIO.setup(self.trig_out_pin, GPIO.OUT)
 		GPIO.setup(self.echo_in_pin, GPIO.IN)
 		GPIO.output(self.echo_in_pin, GPIO.LOW)
-		time.sleep(50)
+		time.sleep(5)
 
 		print(f"{self.label} setup completed, sensor initialized")
 
+	def get_distance(self):
+		
+		GPIO.output(self.trig_out_pin, GPIO.HIGH)
+		time.sleep(0.00001)
+		GPIO.output(self.trig_out_pin, GPIO.LOW)
 
-	def get_sensor_readings(self):
+		while GPIO.input(self.echo_in_pin) == GPIO.LOW:
+			time_start = time.time()
 
+		while GPIO.input(self.echo_in_pin) == GPIO.HIGH:
+			time_stop = time.time()
 
-		pass
+		pulse_duration = time_stop - time_start
+		
+		distance = pulse_duration * 34300/2
 
-	
-	
-	
-	
+		distance = round(distance,2)
+
+		return distance, pulse_duration
+
+		
+	def get_sensor_readings(self,num_itr=1):
+
+		cum_dist = 0
+		cum_pulse = 0
+
+		for i in range(num_itr):
+
+			dist, pulse_duration = self.get_distance()
+			cum_dist += dist
+			cum_pulse +=pulse_duration
+
+		avg_dist = cum_dist / num_itr
+		avg_pulse = cum_pulse / num_itr
+
+		sensor_reading = {  'distance,cm':avg_dist,
+		    				'pulse duration,s':avg_pulse,
+							'samples taken':num_itr,
+							'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
+							}
+
+		return sensor_reading
+
 	
 	@set_thread
 	@threaded
@@ -307,7 +350,15 @@ class ultasonic():
 
 
 if __name__ == '__main__':
-	env_sensor = BME680()
-	env_sensor.start()
+
+	water_level = ultrasonic(26,19)
+	water_level.start()
 	time.sleep(60)
-	env_sensor.stop()
+	water_level.stop()
+	
+
+
+	# env_sensor = BME680()
+	# env_sensor.start()
+	# time.sleep(60)
+	# env_sensor.stop()
