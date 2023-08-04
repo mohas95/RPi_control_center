@@ -2,6 +2,7 @@ __pycache__/
 dist/
 log/
 api/
+venv/
 
 *.egg-info
 relay_config.json
