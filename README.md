@@ -132,6 +132,14 @@ env_sensor.stop()
 
 ## Hardware and drivers
 
+### List of Compatible Sensors
+
+- BEM680
+- any Ultrasonic sensor
+
+
+
+
 ### Hardware
 
 - [Raspberrypi 3B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)

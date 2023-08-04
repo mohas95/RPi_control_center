@@ -6,6 +6,8 @@ import os
 import os.path
 import sys
 from .gravity import DFRobot_BME680, DFRobot_BME280
+import RPi.GPIO as GPIO
+
 ########################################################### Wrapper/decorator & Helper functions
 def threaded(func):
 	"""start and return a thread of the passed in function. Threadify a function with the @threaded decorator"""
@@ -242,6 +244,67 @@ class BME680():
 	def stop(self):
 		self.status = False
 		print(f'attempting to stop thread of {self.label}')
+
+
+class ultasonic():
+	def __init__(self, trig_out_pin, echo_in_pin, label='HC-SR04P' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
+		self.label = label
+		self.status = False
+		self.trig_out_pin = trig_out_pin
+		self.echo_in_pin = echo_in_pin
+		self.sensor_readings = None
+		self.api_file = initiate_file(api_dir,label+".json")
+		self.log_file = initiate_file(log_dir,label+"-process.log")
+		self.refresh_rate = refresh_rate
+		self.logger = None
+		self.thread = None
+
+	def begin(self):
+		"""
+		initialize and setup the sensor
+		""" 
+		
+		if GPIO.getmode() != GPIO.BCM:
+			GPIO.setmode(GPIO.BCM)
+		
+		GPIO.setup(self.trig_out_pin, GPIO.OUT)
+		GPIO.setup(self.echo_in_pin, GPIO.IN)
+		GPIO.output(self.echo_in_pin, GPIO.LOW)
+		time.sleep(50)
+
+		print(f"{self.label} setup completed, sensor initialized")
+
+
+	def get_sensor_readings(self):
+
+
+		pass
+
+	
+	
+	
+	
+	
+	@set_thread
+	@threaded
+	def start(self):
+		self.status = True
+		print(f'Starting {self.label} process')
+		data = {'label':self.label}
+		self.begin()
+
+		while self.status:
+			data['sensor_data'] = self.get_sensor_readings()
+			push_to_api(self.api_file, data)
+			time.sleep(self.refresh_rate)
+
+		print(f'Stopping {self.label} thread processes in progress')
+		print('Thread process ended')
+
+	def stop(self):
+		self.status = False
+		print(f'attempting to stop thread of {self.label}')
+
 
 if __name__ == '__main__':
 	env_sensor = BME680()
