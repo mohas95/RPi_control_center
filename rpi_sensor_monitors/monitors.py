@@ -249,11 +249,12 @@ class BME680():
 
 
 class ultrasonic():
-	def __init__(self, trig_out_pin, echo_in_pin, label='HC-SR04P' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
+	def __init__(self, trig_out_pin, echo_in_pin, timeout=5, label='HC-SR04P' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
 		self.label = label
 		self.status = False
 		self.trig_out_pin = trig_out_pin
 		self.echo_in_pin = echo_in_pin
+		self.timeout = timeout
 		self.sensor_readings = None
 		self.api_file = initiate_file(api_dir,label+".json")
 		self.log_file = initiate_file(log_dir,label+"-process.log")
@@ -290,11 +291,18 @@ class ultrasonic():
 		time.sleep(0.00001)
 		GPIO.output(self.trig_out_pin, GPIO.LOW)
 
+		time_start = time.time()
+
 		while GPIO.input(self.echo_in_pin) == GPIO.LOW:
-			time_start = time.time()
+			if time.time()-time_start > self.timeout:
+				raise TimeoutError("timeout while waiting for signal to go high")
+
 
 		while GPIO.input(self.echo_in_pin) == GPIO.HIGH:
-			time_stop = time.time()
+			if time.time()-time_start > self.timeout:
+				raise TimeoutError("timeout while waiting for signal to go low")
+
+		time_stop = time.time()
 
 		pulse_duration = time_stop - time_start
 		
@@ -312,7 +320,11 @@ class ultrasonic():
 
 		for i in range(num_itr):
 
-			dist, pulse_duration = self.get_distance()
+			try:
+				dist, pulse_duration = self.get_distance()
+			except:
+				return None
+			
 			cum_dist += dist
 			cum_pulse +=pulse_duration
 
