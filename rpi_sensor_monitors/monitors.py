@@ -279,7 +279,7 @@ class ultrasonic():
 		
 		GPIO.setup(self.trig_out_pin, GPIO.OUT)
 		GPIO.setup(self.echo_in_pin, GPIO.IN)
-		GPIO.output(self.echo_in_pin, GPIO.LOW)
+		GPIO.output(self.trig_out_pin, GPIO.LOW)
 		time.sleep(5)
 
 		print(f"{self.label} setup completed, sensor initialized")
