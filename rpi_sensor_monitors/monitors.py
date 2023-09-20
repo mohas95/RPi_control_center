@@ -490,6 +490,81 @@ class AM2320:
         print(f'attempting to stop thread of {self.label}')
 
 
+class DualCamera:
+    def __init__(self, photo_dir='./photos/', resolution='640x480', label='DualCamera', api_dir='./api/', log_dir='./log/', refresh_rate=10):
+        self.label = label
+        self.status = False
+        self.photo_dir = photo_dir
+        self.resolution = resolution
+        self.api_file = initiate_file(api_dir, label+".json")
+        self.log_file = initiate_file(log_dir, label+"-process.log")
+        self.refresh_rate = refresh_rate
+        self.logger = None
+        self.thread = None
+        
+        # Ensure the photo directory exists
+        if not os.path.exists(self.photo_dir):
+            os.makedirs(self.photo_dir)
+
+    def set_thread(func):
+        """Decorator Function to set the thread property of the object to the output of a function returning a thread object"""
+        def wrapper(self):
+            self.thread = func(self)
+            print(f'thread object for {self.label} set as {self.thread}')
+            return self.thread
+        return wrapper
+
+    def capture_images(self):
+        # Static file names
+        image_1_filename = 'camera1.jpg'
+        image_2_filename = 'camera2.jpg'
+
+        # Full path to save the images
+        image_1_path = os.path.join(self.photo_dir, image_1_filename)
+        image_2_path = os.path.join(self.photo_dir, image_2_filename)
+
+        # Capture images using fswebcam
+        try:
+            os.system(f'sudo fswebcam -d /dev/video0 -r {self.resolution} -S 2 -F 10 {image_1_path}')
+            os.system(f'sudo fswebcam -d /dev/video1 -r {self.resolution} -S 2 -F 10 {image_2_path}')
+            print(f'Images saved to {image_1_path} and {image_2_path}')
+
+            self.sensor_readings= {
+                'image_1': os.path.basename(image_1_path),
+                'image_2': os.path.basename(image_2_path),
+                'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
+            }
+
+            return self.sensor_readings
+        except Exception as e:
+            print(f'Error capturing images: {e}')
+
+            self.sensor_readings= {
+                'image_1': None,
+                'image_2': None,
+                'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
+            }
+            return self.sensor_readings
+
+    @set_thread
+    @threaded
+    def start(self):
+        self.status = True
+        print(f'Starting {self.label} process')
+        data = {'label': self.label}
+
+        while self.status:
+            data['sensor_data'] = self.capture_images()
+            push_to_api(self.api_file, data)
+            time.sleep(self.refresh_rate)
+
+        print(f'Stopping {self.label} thread processes in progress')
+        print('Thread process ended')
+
+    def stop(self):
+        self.status = False
+        print(f'attempting to stop thread of {self.label}')
+
 if __name__ == '__main__':
 
     water_level = ultrasonic(26,19)
