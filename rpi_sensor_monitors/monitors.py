@@ -494,6 +494,7 @@ class DualUSBCamera:
     def __init__(self, photo_dir='./photos/', camera1='/dev/video0', camera2='/dev/video2', resolution='640x480', label='DualCamera', api_dir='./api/', log_dir='./log/', refresh_rate=10):
         self.label = label
         self.status = False
+        self.sensor_readings=None
         self.photo_dir = photo_dir
         self.camera1= camera1
         self.camera2= camera2
