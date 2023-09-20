@@ -297,7 +297,8 @@ class ultrasonic():
 			if time.time()-time_start > self.timeout:
 				raise TimeoutError("timeout while waiting for signal to go high")
 
-
+		time_start = time.time()
+		
 		while GPIO.input(self.echo_in_pin) == GPIO.HIGH:
 			if time.time()-time_start > self.timeout:
 				raise TimeoutError("timeout while waiting for signal to go low")
