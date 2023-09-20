@@ -298,7 +298,7 @@ class ultrasonic():
 				raise TimeoutError("timeout while waiting for signal to go high")
 
 		time_start = time.time()
-		
+
 		while GPIO.input(self.echo_in_pin) == GPIO.HIGH:
 			if time.time()-time_start > self.timeout:
 				raise TimeoutError("timeout while waiting for signal to go low")
@@ -324,7 +324,8 @@ class ultrasonic():
 			try:
 				dist, pulse_duration = self.get_distance()
 			except:
-				return None
+				self.sensor_readings = None
+				return self.sensor_readings
 			
 			cum_dist += dist
 			cum_pulse +=pulse_duration
@@ -332,13 +333,13 @@ class ultrasonic():
 		avg_dist = cum_dist / num_itr
 		avg_pulse = cum_pulse / num_itr
 
-		sensor_reading = {  'distance,cm':avg_dist,
+		self.sensor_readings = {  'distance,cm':avg_dist,
 		    				'pulse duration,s':avg_pulse,
 							'samples taken':num_itr,
 							'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
 							}
 
-		return sensor_reading
+		return self.sensor_readings
 
 	
 	@set_thread
@@ -360,6 +361,9 @@ class ultrasonic():
 	def stop(self):
 		self.status = False
 		print(f'attempting to stop thread of {self.label}')
+
+
+
 
 
 if __name__ == '__main__':
