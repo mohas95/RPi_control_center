@@ -490,11 +490,13 @@ class AM2320:
         print(f'attempting to stop thread of {self.label}')
 
 
-class DualCamera:
-    def __init__(self, photo_dir='./photos/', resolution='640x480', label='DualCamera', api_dir='./api/', log_dir='./log/', refresh_rate=10):
+class DualUSBCamera:
+    def __init__(self, photo_dir='./photos/', camera1='/dev/video0', camera2='/dev/video2', resolution='640x480', label='DualCamera', api_dir='./api/', log_dir='./log/', refresh_rate=10):
         self.label = label
         self.status = False
         self.photo_dir = photo_dir
+        self.camera1= camera1
+        self.camera2= camera2
         self.resolution = resolution
         self.api_file = initiate_file(api_dir, label+".json")
         self.log_file = initiate_file(log_dir, label+"-process.log")
@@ -525,8 +527,8 @@ class DualCamera:
 
         # Capture images using fswebcam
         try:
-            os.system(f'sudo fswebcam -d /dev/video0 -r {self.resolution} -S 2 -F 10 {image_1_path}')
-            os.system(f'sudo fswebcam -d /dev/video1 -r {self.resolution} -S 2 -F 10 {image_2_path}')
+            os.system(f'sudo fswebcam -d {self.camera1} -r {self.resolution} -S 2 -F 10 {image_1_path}')
+            os.system(f'sudo fswebcam -d {self.camera2} -r {self.resolution} -S 2 -F 10 {image_2_path}')
             print(f'Images saved to {image_1_path} and {image_2_path}')
 
             self.sensor_readings= {
