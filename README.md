@@ -181,6 +181,10 @@ All kinds of feedback and contributions are welcome.
   - [GitLab](https://gitlab.com/moha7108/), [Github](https://github.com/moha7108/), [Twitter](https://twitter.com/moha7108)
 
 ## Change Log
+### 0.2.2 
+- add ultrasonic sensor monitor
+    - get sensor reading from object directly
+- add 
 ### 0.2.1
 - add data module with csv handler class to the rpi_control_center package
 -
