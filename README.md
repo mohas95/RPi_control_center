@@ -184,7 +184,7 @@ All kinds of feedback and contributions are welcome.
 ### 0.2.2 
 - add ultrasonic sensor monitor
     - get sensor reading from object directly
-- add 
+- add am2420 sensor class
 ### 0.2.1
 - add data module with csv handler class to the rpi_control_center package
 -
