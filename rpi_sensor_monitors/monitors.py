@@ -324,7 +324,12 @@ class ultrasonic():
 			try:
 				dist, pulse_duration = self.get_distance()
 			except:
-				self.sensor_readings = None
+				self.sensor_readings = {  'distance,cm':None,
+		    				'pulse duration,s':None,
+							'samples taken':None,
+							'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
+							}
+				
 				return self.sensor_readings
 			
 			cum_dist += dist
