@@ -58,7 +58,7 @@ def initiate_file(dir, filename):
 ######################################################################## Classes
 
 class pwm_control():
-    def __init__(self, pwm_pin, freq=50, label='pwm_control' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
+    def __init__(self, pwm_pin, init_duty=0, freq=50, label='pwm_control' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
 
         self.label = label
         self.status = False
@@ -66,7 +66,7 @@ class pwm_control():
         self.pwm_pin = pwm_pin
         self.pwm=None
         self.freq=freq
-        self.duty=None
+        self.duty=init_duty
         self.api_file = initiate_file(api_dir,label+".json")
         self.log_file = initiate_file(log_dir,label+"-process.log")
         self.refresh_rate = refresh_rate
@@ -117,11 +117,10 @@ class pwm_control():
     
     @set_thread
     @threaded
-    def start(self, duty):
+    def start(self):
 
         self.status = True
         self.begin()
-        self.duty = duty
         self.pwm.start(self.duty)
         # super().start(self.duty)
 
