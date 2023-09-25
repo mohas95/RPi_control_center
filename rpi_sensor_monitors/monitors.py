@@ -347,7 +347,6 @@ class ultrasonic():
                             }
 
         return self.sensor_readings
-
     
     @set_thread
     @threaded
@@ -363,15 +362,13 @@ class ultrasonic():
             time.sleep(self.refresh_rate)
 
         print(f'Stopping {self.label} thread processes in progress')
+        GPIO.cleanup(self.trig_out_pin)
+        GPIO.cleanup(self.echo_in_pin)
         print('Thread process ended')
 
     def stop(self):
         self.status = False
         print(f'attempting to stop thread of {self.label}')
-
-
-
-
 
 class AM2320:
     

@@ -186,6 +186,8 @@ All kinds of feedback and contributions are welcome.
     - get sensor reading from object directly
 - add am2420 sensor class
 - add dual camera (VERY SPECIFIC USECASE)
+- change package architecture to incluide control module
+- add pwm to control module
 ### 0.2.1
 - add data module with csv handler class to the rpi_control_center package
 -
