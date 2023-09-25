@@ -205,3 +205,8 @@ All kinds of feedback and contributions are welcome.
 - Logging via logzero, ability to suppress debug level logs when debug_mode is off
 - create log and api folders when they do not exist
 - all previous versions are pre release, this is the first working release
+
+### Packaging Notes
+- source venv/bin/activate
+- python setup.py sdist bdist_wheel
+- twine upload dist/*  or twine upload --repository-url https://test.pypi.org/legacy/ dist/*
