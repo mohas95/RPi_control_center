@@ -59,6 +59,9 @@ def initiate_file(dir, filename):
 ######################################################################## Classes
 
 class pwm_control():
+    '''
+    please note that duty cycle is out of 255 for pigio
+    '''
     def __init__(self, pwm_pin, init_duty=0, freq=50, label='pwm_control', driver= 'RPi.GPIO' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
 
         self.label = label
@@ -131,8 +134,8 @@ class pwm_control():
     def get_control_readings(self):
 
 
-        self.control_readings = {'PWM Frequency':self.freq,
-                                 'PWM Duty Cycle%': (self.duty/255)*100 if self.driver =='pigio' else self.duty,
+        self.control_readings = {'PWM Frequency Hz':self.freq,
+                                 'PWM Duty Cycle %': (self.duty/255)*100 if self.driver =='pigio' else self.duty,
                                  'PWM Driver':self.driver,
                                  'status': 'active' if self.status else 'offline',
                                  'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
