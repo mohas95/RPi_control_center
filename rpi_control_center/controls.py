@@ -5,6 +5,7 @@ import threading
 import time
 import datetime
 import RPi.GPIO as GPIO
+import pigpio
 
 import logging
 import logzero
@@ -58,11 +59,12 @@ def initiate_file(dir, filename):
 ######################################################################## Classes
 
 class pwm_control():
-    def __init__(self, pwm_pin, init_duty=0, freq=50, label='pwm_control' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
+    def __init__(self, pwm_pin, init_duty=0, freq=50, label='pwm_control', driver= 'RPi.GPIO' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
 
         self.label = label
         self.status = False
         self.pwm_pin = pwm_pin
+        self.driver= driver
         self.pwm=None
         self.freq=freq
         self.duty=init_duty
@@ -87,27 +89,42 @@ class pwm_control():
         """
         initialize and setup the sensor
         """ 
-        if GPIO.getmode() != GPIO.BCM:
-            GPIO.setmode(GPIO.BCM)
-        
-        GPIO.setup(self.pwm_pin, GPIO.OUT)
+        if self.driver == 'RPi.GPIO':
+            if GPIO.getmode() != GPIO.BCM:
+                GPIO.setmode(GPIO.BCM)
+            
+            GPIO.setup(self.pwm_pin, GPIO.OUT)
 
-        self.pwm = GPIO.PWM(self.pwm_pin, self.freq)
+            self.pwm = GPIO.PWM(self.pwm_pin, self.freq)
+            self.pwm.start(self.duty)
         
-        print(f"{self.label} setup completed, sensor initialized")
+        elif self.driver == 'pigpio':
+            self.pwm = pigpio.pi()
+            self.pwm.set_frequency(self.pwm_pin, self.freq)
+            self.pwm.set_dutycycle(self.pwm_pin, self.duty)
+        
+        print(f"{self.label} setup completed, pwm initialized using {self.driver}")
 
     def change_frequency(self,freq):
 
         self.freq=freq 
 
-        self.pwm.ChangeFrequency(self.freq)
+        if self.driver=='RPi.GPIO':
+            self.pwm.ChangeFrequency(self.freq)
+        elif self.driver == 'pigpio'
+            self.pwm.set_PWM_frequency(self.pwm_pin, self.freq)
 
         return self.freq
 
     def change_duty_cycle(self,duty):
         self.duty = duty
 
-        self.pwm.ChangeDutyCycle(self.duty)
+
+        if self.driver=='RPi.GPIO':
+            self.pwm.ChangeDutyCycle(self.duty)
+
+        elif self.driver == 'pigpio'
+            self.pwm.set_PWM_dutycycle(self.pwm_pin, self.duty)
 
         return self.duty
     
@@ -127,9 +144,7 @@ class pwm_control():
     def start(self):
 
         self.status = True
-        self.begin()
-        self.pwm.start(self.duty)
-        # super().start(self.duty)
+        self.begin()            
 
         print(f'Starting {self.label} process')
         data = {'label': self.label}
@@ -141,11 +156,12 @@ class pwm_control():
             time.sleep(self.refresh_rate)
         
         print(f'Stopping {self.label} thread processes in progress')
+        
         self.change_duty_cycle(0)
         data['control_data'] = self.get_control_readings()
         push_to_api(self.api_file, data)
         self.pwm.stop()
-        GPIO.cleanup(self.pwm_pin)
+        if self.driver =='RPi.GPIO': GPIO.cleanup(self.pwm_pin)
         self.pwm = None
         print('Thread process ended')
 
