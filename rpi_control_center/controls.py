@@ -111,7 +111,7 @@ class pwm_control():
 
         if self.driver=='RPi.GPIO':
             self.pwm.ChangeFrequency(self.freq)
-        elif self.driver == 'pigpio'
+        elif self.driver == 'pigpio':
             self.pwm.set_PWM_frequency(self.pwm_pin, self.freq)
 
         return self.freq
@@ -123,7 +123,7 @@ class pwm_control():
         if self.driver=='RPi.GPIO':
             self.pwm.ChangeDutyCycle(self.duty)
 
-        elif self.driver == 'pigpio'
+        elif self.driver == 'pigpio':
             self.pwm.set_PWM_dutycycle(self.pwm_pin, self.duty)
 
         return self.duty
