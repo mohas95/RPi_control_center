@@ -62,7 +62,6 @@ class pwm_control():
 
         self.label = label
         self.status = False
-        self.sensor_readings = None
         self.pwm_pin = pwm_pin
         self.pwm=None
         self.freq=freq
@@ -72,6 +71,8 @@ class pwm_control():
         self.refresh_rate = refresh_rate
         self.logger = None
         self.thread = None
+        self.control_readings = self.get_control_readings()
+
 
 
     def set_thread(func):
@@ -92,7 +93,6 @@ class pwm_control():
         GPIO.setup(self.pwm_pin, GPIO.OUT)
 
         self.pwm = GPIO.PWM(self.pwm_pin, self.freq)
-        # super().__init__(self.pwm_pin, self.freq)
         
         print(f"{self.label} setup completed, sensor initialized")
 
@@ -102,8 +102,6 @@ class pwm_control():
 
         self.pwm.ChangeFrequency(self.freq)
 
-        # super().ChangeFrequency(self.freq)
-
         return self.freq
 
     def change_duty_cycle(self,duty):
@@ -111,9 +109,18 @@ class pwm_control():
 
         self.pwm.ChangeDutyCycle(self.duty)
 
-        # super().ChangeDutyCycle(self.duty)
-
         return self.duty
+    
+    def get_control_readings(self):
+
+        self.control_readings = {'PWM Frequency':self.freq,
+                                 'PWM Duty Cycle':self.duty,
+                                 'status': 'active' if self.status else 'offline',
+                                 'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
+                                 }
+
+        return self.control_readings 
+
     
     @set_thread
     @threaded
@@ -128,16 +135,16 @@ class pwm_control():
         data = {'label': self.label}
 
         while self.status:
-            data['control_data'] = {'PWM Frequency':self.freq,
-                                   'PWM Duty Cycle':self.duty
-                                   }
+            data['control_data'] = self.get_control_readings()
             
             push_to_api(self.api_file, data)
             time.sleep(self.refresh_rate)
         
         print(f'Stopping {self.label} thread processes in progress')
+        self.change_duty_cycle(0)
+        data['control_data'] = self.get_control_readings()
+        push_to_api(self.api_file, data)
         self.pwm.stop()
-        # super().stop()
         GPIO.cleanup(self.pwm_pin)
         self.pwm = None
         print('Thread process ended')
