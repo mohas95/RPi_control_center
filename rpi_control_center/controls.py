@@ -135,7 +135,7 @@ class pwm_control():
 
 
         self.control_readings = {'PWM Frequency Hz':self.freq,
-                                 'PWM Duty Cycle %': (self.duty/255)*100 if self.driver =='pigpio' else self.duty,
+                                 'PWM Duty Cycle %': round((self.duty/255)*100,2) if self.driver =='pigpio' else self.duty,
                                  'PWM Driver':self.driver,
                                  'status': 'active' if self.status else 'offline',
                                  'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
