@@ -130,8 +130,10 @@ class pwm_control():
     
     def get_control_readings(self):
 
+
         self.control_readings = {'PWM Frequency':self.freq,
-                                 'PWM Duty Cycle':self.duty,
+                                 'PWM Duty Cycle%': (self.duty/255)*100 if self.driver =='pigio' else self.duty,
+                                 'PWM Driver':self.driver,
                                  'status': 'active' if self.status else 'offline',
                                  'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
                                  }
