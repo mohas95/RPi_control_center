@@ -100,8 +100,8 @@ class pwm_control():
         
         elif self.driver == 'pigpio':
             self.pwm = pigpio.pi()
-            self.pwm.set_frequency(self.pwm_pin, self.freq)
-            self.pwm.set_dutycycle(self.pwm_pin, self.duty)
+            self.pwm.set_PWM_frequency(self.pwm_pin, self.freq)
+            self.pwm.set_PWM_dutycycle(self.pwm_pin, self.duty)
         
         print(f"{self.label} setup completed, pwm initialized using {self.driver}")
 
