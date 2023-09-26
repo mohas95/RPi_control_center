@@ -336,7 +336,7 @@ class ultrasonic():
             except Exception as e:
                 attempts +=1
 
-                if attempts>10:
+                if attempts>num_itr:
                     self.sensor_readings = {  'distance,cm':None,
                                 'pulse duration,s':None,
                                 'samples taken':None,
