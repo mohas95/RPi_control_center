@@ -316,26 +316,36 @@ class ultrasonic():
         return distance, pulse_duration
 
         
-    def get_sensor_readings(self,num_itr=1):
+    def get_sensor_readings(self,num_itr=10):
 
         cum_dist = 0
         cum_pulse = 0
 
-        for i in range(num_itr):
+        attempts = 0
+        successful_reads = 0
+
+        while successful_reads < num_itr:
 
             try:
                 dist, pulse_duration = self.get_distance()
-            except:
-                self.sensor_readings = {  'distance,cm':None,
-                            'pulse duration,s':None,
-                            'samples taken':None,
-                            'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
-                            }
-                
-                return self.sensor_readings
+                cum_dist += dist
+                cum_pulse +=pulse_duration
+
+                successful_reads += 1
+
+            except Exception as e:
+                attempts +=1
+
+                if attempts>10:
+                    self.sensor_readings = {  'distance,cm':None,
+                                'pulse duration,s':None,
+                                'samples taken':None,
+                                'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
+                                }
+                    
+                    return self.sensor_readings
             
-            cum_dist += dist
-            cum_pulse +=pulse_duration
+            
 
         avg_dist = cum_dist / num_itr
         avg_pulse = cum_pulse / num_itr
