@@ -251,7 +251,7 @@ class BME680():
 
 
 class ultrasonic():
-    def __init__(self, trig_out_pin, echo_in_pin, timeout=5, label='HC-SR04P' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
+    def __init__(self, trig_out_pin, echo_in_pin, timeout=1, label='HC-SR04P' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
         self.label = label
         self.status = False
         self.trig_out_pin = trig_out_pin
@@ -347,12 +347,12 @@ class ultrasonic():
             
             
 
-        avg_dist = cum_dist / num_itr
-        avg_pulse = cum_pulse / num_itr
+        avg_dist = cum_dist / successful_reads 
+        avg_pulse = cum_pulse / successful_reads 
 
-        self.sensor_readings = {  'distance,cm':avg_dist,
-                            'pulse duration,s':avg_pulse,
-                            'samples taken':num_itr,
+        self.sensor_readings = {  'distance,cm':round(avg_dist,2),
+                            'pulse duration,s':round(avg_pulse,5),
+                            'samples taken':successful_reads,
                             'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
                             }
 
