@@ -251,12 +251,13 @@ class BME680():
 
 
 class ultrasonic():
-    def __init__(self, trig_out_pin, echo_in_pin, timeout=1, label='HC-SR04P' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
+    def __init__(self, trig_out_pin, echo_in_pin, num_itr=10 , timeout=1, label='HC-SR04P' , api_dir='./api/', log_dir='./log/',refresh_rate=1):
         self.label = label
         self.status = False
         self.trig_out_pin = trig_out_pin
         self.echo_in_pin = echo_in_pin
         self.timeout = timeout
+        self.num_itr = num_itr
         self.sensor_readings = None
         self.api_file = initiate_file(api_dir,label+".json")
         self.log_file = initiate_file(log_dir,label+"-process.log")
@@ -316,7 +317,7 @@ class ultrasonic():
         return distance, pulse_duration
 
         
-    def get_sensor_readings(self,num_itr=10):
+    def get_sensor_readings(self):
 
         cum_dist = 0
         cum_pulse = 0
@@ -324,7 +325,7 @@ class ultrasonic():
         attempts = 0
         successful_reads = 0
 
-        while successful_reads < num_itr:
+        while successful_reads < self.num_itr:
 
             try:
                 dist, pulse_duration = self.get_distance()
@@ -336,7 +337,7 @@ class ultrasonic():
             except Exception as e:
                 attempts +=1
 
-                if attempts>num_itr:
+                if attempts>self.num_itr:
                     self.sensor_readings = {  'distance,cm':None,
                                 'pulse duration,s':None,
                                 'samples taken':None,
