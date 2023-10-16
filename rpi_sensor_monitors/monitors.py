@@ -539,7 +539,7 @@ class DualUSBCamera:
         return wrapper
 
     def capture_images(self):
-        ts = datetime.datetime.now().strftime(timestamp_strformat)
+        ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
 
         #file names
         image_1_filename = f'camera1_{ts}.jpg' if self.log_latest  else 'camera1.jpg'
