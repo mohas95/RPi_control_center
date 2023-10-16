@@ -37,6 +37,18 @@ def delete_file(file):
         print(f'{file} Does not exist')
         pass
 
+
+def delete_contents(directory):
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+
+
 def initiate_file(dir, filename):
     """This function checks whether a directory exists and if not creates it"""
     try:
@@ -499,8 +511,9 @@ class AM2320:
 
 
 class DualUSBCamera:
-    def __init__(self, photo_dir='./photos/', camera1='/dev/video0', camera2='/dev/video2', resolution='640x480', label='DualCamera', api_dir='./api/', log_dir='./log/', refresh_rate=10):
+    def __init__(self, photo_dir='./photos/', camera1='/dev/video0', camera2='/dev/video2', resolution='640x480',log_latest = False, label='DualCamera', api_dir='./api/', log_dir='./log/', refresh_rate=10):
         self.label = label
+        self.log_latest = log_latest
         self.status = False
         self.sensor_readings=None
         self.photo_dir = photo_dir
@@ -526,9 +539,11 @@ class DualUSBCamera:
         return wrapper
 
     def capture_images(self):
-        # Static file names
-        image_1_filename = 'camera1.jpg'
-        image_2_filename = 'camera2.jpg'
+        ts = datetime.datetime.now().strftime(timestamp_strformat)
+
+        #file names
+        image_1_filename = f'camera1_{ts}.jpg' if self.log_latest  else 'camera1.jpg'
+        image_2_filename = f'camera2_{ts}.jpg' if self.log_latest  else 'camera2.jpg'
 
         # Full path to save the images
         image_1_path = os.path.join(self.photo_dir, image_1_filename)
@@ -536,6 +551,8 @@ class DualUSBCamera:
 
         # Capture images using fswebcam
         try:
+            if self.log_latest: delete_contents(self.photo_dir)
+
             os.system(f'sudo fswebcam -d {self.camera1} -r {self.resolution} -S 2 -F 10 --no-banner {image_1_path}')
             os.system(f'sudo fswebcam -d {self.camera2} -r {self.resolution} -S 2 -F 10 --no-banner {image_2_path}')
             print(f'Images saved to {image_1_path} and {image_2_path}')
@@ -543,7 +560,7 @@ class DualUSBCamera:
             self.sensor_readings= {
                 'image_1': os.path.basename(image_1_path),
                 'image_2': os.path.basename(image_2_path),
-                'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
+                'timestamp': ts
             }
 
             return self.sensor_readings
@@ -553,7 +570,7 @@ class DualUSBCamera:
             self.sensor_readings= {
                 'image_1': None,
                 'image_2': None,
-                'timestamp': datetime.datetime.now().strftime(timestamp_strformat)
+                'timestamp': ts
             }
             return self.sensor_readings
 
