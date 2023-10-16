@@ -28,6 +28,17 @@ def push_to_api(api_file,data):
     with open(api_file,"w") as f:
         f.write(json.dumps(data,indent=4))
 
+def delete_contents(directory, expiration=0):
+    now = time.time()  # current time in seconds since the epoch
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        try:
+            # Check if the file's age is older than expiration
+            if os.path.isfile(file_path) and (now - os.path.getmtime(file_path)) > expiration:
+                os.unlink(file_path)
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
+
 def delete_file(file):
     """delete file"""
     if os.path.exists(file):
@@ -36,17 +47,6 @@ def delete_file(file):
     else:
         print(f'{file} Does not exist')
         pass
-
-
-def delete_contents(directory):
-    for filename in os.listdir(directory):
-        file_path = os.path.join(directory, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-        except Exception as e:
-            print('Failed to delete %s. Reason: %s' % (file_path, e))
-
 
 
 def initiate_file(dir, filename):
@@ -511,9 +511,10 @@ class AM2320:
 
 
 class DualUSBCamera:
-    def __init__(self, photo_dir='./photos/', camera1='/dev/video0', camera2='/dev/video2', resolution='640x480',log_latest = False, label='DualCamera', api_dir='./api/', log_dir='./log/', refresh_rate=10):
+    def __init__(self, photo_dir='./photos/', camera1='/dev/video0', camera2='/dev/video2', resolution='640x480',log_latest = False, expiration =60,label='DualCamera', api_dir='./api/', log_dir='./log/', refresh_rate=10):
         self.label = label
         self.log_latest = log_latest
+        self.expiration = expiration
         self.status = False
         self.sensor_readings=None
         self.photo_dir = photo_dir
@@ -551,7 +552,7 @@ class DualUSBCamera:
 
         # Capture images using fswebcam
         try:
-            if self.log_latest: delete_contents(self.photo_dir)
+            if self.log_latest: delete_contents(self.photo_dir, self.expiration)
 
             os.system(f'sudo fswebcam -d {self.camera1} -r {self.resolution} -S 2 -F 10 --no-banner {image_1_path}')
             os.system(f'sudo fswebcam -d {self.camera2} -r {self.resolution} -S 2 -F 10 --no-banner {image_2_path}')
