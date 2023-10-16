@@ -536,8 +536,8 @@ class DualUSBCamera:
 
         # Capture images using fswebcam
         try:
-            os.system(f'sudo fswebcam -d {self.camera1} -r {self.resolution} -S 2 -F 10 {image_1_path}')
-            os.system(f'sudo fswebcam -d {self.camera2} -r {self.resolution} -S 2 -F 10 {image_2_path}')
+            os.system(f'sudo fswebcam -d {self.camera1} -r {self.resolution} -S 2 -F 10 --no-banner {image_1_path}')
+            os.system(f'sudo fswebcam -d {self.camera2} -r {self.resolution} -S 2 -F 10 --no-banner {image_2_path}')
             print(f'Images saved to {image_1_path} and {image_2_path}')
 
             self.sensor_readings= {
