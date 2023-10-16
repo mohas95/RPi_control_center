@@ -541,6 +541,7 @@ class DualUSBCamera:
 
     def capture_images(self):
         ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+        formatted_ts = datetime.datetime.strptime(ts, '%Y%m%d_%H%M%S').strftime(timestamp_strformat)
 
         #file names
         image_1_filename = f'camera1_{ts}.jpg' if self.log_latest  else 'camera1.jpg'
@@ -561,7 +562,7 @@ class DualUSBCamera:
             self.sensor_readings= {
                 'image_1': os.path.basename(image_1_path),
                 'image_2': os.path.basename(image_2_path),
-                'timestamp': ts
+                'timestamp': formatted_ts
             }
 
             return self.sensor_readings
@@ -571,7 +572,7 @@ class DualUSBCamera:
             self.sensor_readings= {
                 'image_1': None,
                 'image_2': None,
-                'timestamp': ts
+                'timestamp': formatted_ts
             }
             return self.sensor_readings
 
