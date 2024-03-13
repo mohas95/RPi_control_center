@@ -179,24 +179,20 @@ class pwm_control():
         print(f'attempting to stop thread of {self.label}')
 
 
-
-
-
-
 default_relay_config = {
         "relay1":{'pin':26, 'state':False, 'last_changed': None},
         "relay2":{'pin':20, 'state':False, 'last_changed': None},
         "relay3":{'pin':21, 'state':False, 'last_changed':None},
 }
 
-
 class relay_engine():
     
-    def __init__(self, relay_config = default_relay_config, label='relays', api_dir='./api/', log_dir='./log/',refresh_rate=1):
+    def __init__(self, relay_config = default_relay_config, wiring = 'no', label='relays', api_dir='./api/', log_dir='./log/',refresh_rate=1):
 
         self.label = label
         self.status = False
         self.relay_config = relay_config
+        self.set_wiring_config(wiring)
         self.api_file = initiate_file(api_dir,label+".json")
         self.log_file = initiate_file(log_dir,label+"-process.log")
         self.refresh_rate = refresh_rate
@@ -213,12 +209,21 @@ class relay_engine():
         return wrapper
 
 
+    def set_wiring_config(self, wiring_config):       
+        self.on_state = GPIO.LOW if wiring_config == "no" else GPIO.HIGH
+        self.off_state = GPIO.HIGH if wiring_config=="no" else GPIO.LOW
+
+        self.wiring = "no" if wiring_config == "no" else "nc"
+
     def get_control_readings(self):
         
         return self.relay_config
 
     def set_relay_state(self, relay, state):
-        '''Sets the relay state given the relay name and the state'''
+        '''Sets the relay state given the relay name and the state
+            True means on_state, False means off_state
+        
+        '''
         if self.relay_config[relay]['state'] != state:
             self.relay_config[relay]['state'] = state
             self.relay_config[relay]['last_changed'] = datetime.datetime.now().strftime(timestamp_strformat)
@@ -226,7 +231,7 @@ class relay_engine():
         if not self.relay_config[relay]['last_changed']:
             self.relay_config[relay]['last_changed'] = datetime.datetime.now().strftime(timestamp_strformat)
 
-        GPIO.output(self.relay_config[relay]['pin'], GPIO.HIGH if self.relay_config[relay]['state']==True else GPIO.LOW)
+        GPIO.output(self.relay_config[relay]['pin'], self.on_state if self.relay_config[relay]['state'] else self.off_state)
 
 
     def begin(self):
@@ -237,7 +242,7 @@ class relay_engine():
             GPIO.setup(relay_params['pin'], GPIO.OUT)
             self.set_relay_state(relay, relay_params['state'])
 
-            print(f"{relay} setup completed, relay initialized {"high" if relay_params['state']==True else "low"} at pin {relay_params['pin']}")
+            print(f"{relay} setup completed, relay initialized {'high' if relay_params['state']==True else 'low'} at pin {relay_params['pin']}")
         
         time.sleep(5)
 
@@ -266,7 +271,7 @@ class relay_engine():
             self.set_relay_state(relay, False)
             GPIO.cleanup(relay_params['pin'])
 
-            print(f"{relay} stopped, relay state set to {"high" if self.relay_config[relay]['state']==True else "low"} at pin {self.relay_config[relay]['pin']}")
+            print(f"{relay} stopped, relay state set to {'high' if self.relay_config[relay]['state']==True else 'low'} at pin {self.relay_config[relay]['pin']}")
 
         data['status'] = self.status 
         data['control_data'] = self.get_control_readings()
@@ -283,4 +288,29 @@ class relay_engine():
 
 if __name__ == '__main__':
 
-    relay_group1 = relay_engine()
+    relay_config = {
+        "relay1":{'pin':26, 'state':False, 'last_changed': None},
+        "activeRelay":{'pin':20, 'state':False, 'last_changed': None},
+        "relay3":{'pin':21, 'state':False, 'last_changed':None},
+    }
+
+    relay_group1 = relay_engine(relay_config=relay_config, wiring = 'no', label='test_relays', api_dir='./api/', log_dir='./log/',refresh_rate=1)
+
+    relay_group1.start()
+
+    time.sleep(10)
+    relay_group1.set_relay_state('relay1',True)
+    time.sleep(5)
+    relay_group1.set_relay_state('activeRelay',True)
+    time.sleep(5)
+    relay_group1.set_relay_state('relay3',True)
+    time.sleep(5)
+    relay_group1.set_relay_state('relay1',False)
+    time.sleep(5)
+    relay_group1.set_relay_state('activeRelay',False)
+    time.sleep(5)
+    relay_group1.set_relay_state('relay3',False)
+    time.sleep(5)
+    print('Done')
+    relay_group1.stop()
+
