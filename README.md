@@ -13,7 +13,6 @@ python's garbage collection. For now refresh rate is by default set to 1 second 
 
 - Documentation: *Coming soon*
 - [Github](https://github.com/moha7108/RPi_control_center)
-- [GitLab](https://gitlab.com/moha7108/rpi-control-center)
 
 ## Installation
 
