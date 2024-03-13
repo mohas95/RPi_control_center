@@ -64,7 +64,7 @@ try:
         time.sleep(5)
         relay_group1.set_relay_state('relay2',False)
         time.sleep(5)
-        relay_group1.set_relay_state('relay3',False
+        relay_group1.set_relay_state('relay3',False)
 except:
     relay_group1.stop()
 ```
