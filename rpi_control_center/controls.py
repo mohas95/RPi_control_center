@@ -303,7 +303,7 @@ class relay_engine():
 if __name__ == '__main__':
 
     relay_config = {
-        "relay1":{'pin':26, 'state':False, 'config':'no', 'last_changed':None},
+        "relay1":{'pin':26, 'state':False, 'config':'no'},
         "relay2":{'pin':20, 'state':False, 'config':'no'},
         "relay3":{'pin':21, 'state':False, 'config':'no'},
     }
