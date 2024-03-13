@@ -1,0 +1,6 @@
+logzero==1.7.0
+pigpio==1.78
+RPI-control-center==0.2.1.27
+RPi.GPIO==0.7.1
+smbus==1.1.post2
+spidev==3.6
