@@ -3,9 +3,11 @@ dist/
 log/
 api/
 venv/
+pypi_venv/
 build/
 
 *.egg-info
 relay_config.json
 logs/*
 api/*
+api_token.txt
