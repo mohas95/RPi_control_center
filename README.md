@@ -85,7 +85,7 @@ for dev in storage_devices:
     os.system(f'sudo ls /mnt')
 ```
 
-### CSV Handling Script
+#### CSV Handling Script
 ```python
 from rpi_control_center.data import csv_handler
 
@@ -99,7 +99,7 @@ print(test_csv.writing_to)
 print(test_csv.total_size)
 ```
 
-### Sensor Monitoring
+### Sensor Monitoring scripts
 ```python
 from rpi_sensor_monitors import monitors
 
@@ -112,40 +112,15 @@ env_sensor.stop()
 
 ## Hardware and drivers
 
+### List of Compatible Raspberry Pi boards
+- [Raspberrypi 3B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+- [Raspberrypi Zero 2W](https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/)
+
 ### List of Compatible Sensors
 
 - BEM680
 - any Ultrasonic sensor
 
-
-
-
-### Hardware
-
-- [Raspberrypi 3B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
-  - OS: Rasbian Buster +
-
-### System Libraries
-
-- [waveshare guide](https://www.waveshare.com/wiki/Libraries_Installation_for_RPi)
-
-``` shell
-cd
-sudo apt update
-sudo apt list --upgradeable
-sudo apt ugrade
-sudo apt autoremove
-
-sudo apt-get install wiringpi
-wget https://project-downloads.drogon.net/wiringpi-latest.deb
-sudo dpkg -i wiringpi-latest.deb
-gpio -v
-sudo apt-get install libopenjp2-7 -y
-sudo apt-get install libatlas-base-dev -y
-sudo apt install libtiff -y
-sudo apt install libtiff5 -y
-sudo apt-get install -y i2c-tools
-```
 
 ## Feedback
 
