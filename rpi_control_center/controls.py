@@ -29,7 +29,7 @@ def threaded(func):
 
 def push_to_api(api_file,data):
     """Push data in json format to an api file"""
-    last_update = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+    last_update = datetime.datetime.now().strftime(timestamp_strformat)
     data["last updated"] = last_update
     with open(api_file,"w") as f:
         f.write(json.dumps(data,indent=4))
@@ -155,6 +155,7 @@ class pwm_control():
         data = {'label': self.label}
 
         while self.status:
+            data['status'] = self.status
             data['control_data'] = self.get_control_readings()
             
             push_to_api(self.api_file, data)
@@ -163,6 +164,8 @@ class pwm_control():
         print(f'Stopping {self.label} thread processes in progress')
         
         self.change_duty_cycle(0)
+        
+        data['status'] = self.status 
         data['control_data'] = self.get_control_readings()
         push_to_api(self.api_file, data)
         self.pwm.stop()
@@ -174,3 +177,110 @@ class pwm_control():
     def stop(self):
         self.status = False
         print(f'attempting to stop thread of {self.label}')
+
+
+
+
+
+
+default_relay_config = {
+        "relay1":{'pin':26, 'state':False, 'last_changed': None},
+        "relay2":{'pin':20, 'state':False, 'last_changed': None},
+        "relay3":{'pin':21, 'state':False, 'last_changed':None},
+}
+
+
+class relay_engine():
+    
+    def __init__(self, relay_config = default_relay_config, label='relays', api_dir='./api/', log_dir='./log/',refresh_rate=1):
+
+        self.label = label
+        self.status = False
+        self.relay_config = relay_config
+        self.api_file = initiate_file(api_dir,label+".json")
+        self.log_file = initiate_file(log_dir,label+"-process.log")
+        self.refresh_rate = refresh_rate
+        self.logger = None
+        self.thread = None
+        self.control_readings = self.get_control_readings()
+
+    def set_thread(func):
+        """Decorator Function in order to set the thread property of the object to the output of a function returning  a thread object"""
+        def wrapper(self):
+            self.thread = func(self)
+            print(f'thread object for {self.label} set as {self.thread}')
+            return self.thread
+        return wrapper
+
+
+    def get_control_readings(self):
+        
+        return self.relay_config
+
+    def set_relay_state(self, relay, state):
+        '''Sets the relay state given the relay name and the state'''
+        if self.relay_config[relay]['state'] != state:
+            self.relay_config[relay]['state'] = state
+            self.relay_config[relay]['last_changed'] = datetime.datetime.now().strftime(timestamp_strformat)
+        
+        if not self.relay_config[relay]['last_changed']:
+            self.relay_config[relay]['last_changed'] = datetime.datetime.now().strftime(timestamp_strformat)
+
+        GPIO.output(self.relay_config[relay]['pin'], GPIO.HIGH if self.relay_config[relay]['state']==True else GPIO.LOW)
+
+
+    def begin(self):
+        if GPIO.getmode() != GPIO.BCM:
+            GPIO.setmode(GPIO.BCM)
+        
+        for relay, relay_params in self.relay_config.items():
+            GPIO.setup(relay_params['pin'], GPIO.OUT)
+            self.set_relay_state(relay, relay_params['state'])
+
+            print(f"{relay} setup completed, relay initialized {"high" if relay_params['state']==True else "low"} at pin {relay_params['pin']}")
+        
+        time.sleep(5)
+
+        print(f"{self.label} setup completed, relays initialized")
+
+    @set_thread
+    @threaded
+    def start(self):
+        
+        self.status = True
+        self.begin()            
+
+        print(f'Starting {self.label} process')
+        data = {'label': self.label}
+
+        while self.status:
+            data['status'] = self.status 
+            data['control_data'] = self.get_control_readings()
+            
+            push_to_api(self.api_file, data)
+            time.sleep(self.refresh_rate)
+        
+        print(f'Stopping {self.label} thread processes in progress')
+        
+        for relay, relay_params in self.relay_config.items():
+            self.set_relay_state(relay, False)
+            GPIO.cleanup(relay_params['pin'])
+
+            print(f"{relay} stopped, relay state set to {"high" if self.relay_config[relay]['state']==True else "low"} at pin {self.relay_config[relay]['pin']}")
+
+        data['status'] = self.status 
+        data['control_data'] = self.get_control_readings()
+        push_to_api(self.api_file, data)
+        
+        print('Thread process ended')
+
+
+    def stop(self):
+        self.status = False
+        print(f'attempting to stop thread of {self.label}')
+
+
+
+if __name__ == '__main__':
+
+    relay_group1 = relay_engine()
