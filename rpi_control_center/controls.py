@@ -180,19 +180,18 @@ class pwm_control():
 
 
 default_relay_config = {
-        "relay1":{'pin':26, 'state':False, 'last_changed': None},
-        "relay2":{'pin':20, 'state':False, 'last_changed': None},
-        "relay3":{'pin':21, 'state':False, 'last_changed':None},
+        "relay1":{'pin':26, 'state':False, 'config':'no',  'last_changed': None},
+        "relay2":{'pin':20, 'state':False, 'config':'no', 'last_changed': None},
+        "relay3":{'pin':21, 'state':False, 'config':'no', 'last_changed':None},
 }
 
 class relay_engine():
     
-    def __init__(self, relay_config = default_relay_config, wiring = 'no', label='relays', api_dir='./api/', log_dir='./log/',refresh_rate=1):
+    def __init__(self, relay_config = default_relay_config, label='relays', api_dir='./api/', log_dir='./log/',refresh_rate=1):
 
         self.label = label
         self.status = False
         self.relay_config = relay_config
-        self.set_wiring_config(wiring)
         self.api_file = initiate_file(api_dir,label+".json")
         self.log_file = initiate_file(log_dir,label+"-process.log")
         self.refresh_rate = refresh_rate
@@ -208,12 +207,27 @@ class relay_engine():
             return self.thread
         return wrapper
 
+    def get_on_state(self,relay):
 
-    def set_wiring_config(self, wiring_config):       
-        self.on_state = GPIO.LOW if wiring_config == "no" else GPIO.HIGH
-        self.off_state = GPIO.HIGH if wiring_config=="no" else GPIO.LOW
+        if self.relay_config[relay]['config'] == 'no':
+            on_state = GPIO.LOW
+        elif self.relay_config[relay]['config'] ==  'nc':
+            on_state =GPIO.HIGH
+        else:
+            raise ValueError("proper relay config not provided, no or nc only")
 
-        self.wiring = "no" if wiring_config == "no" else "nc"
+        return on_state
+
+    def get_off_state(self,relay):
+
+        if self.relay_config[relay]['config'] == 'no':
+            off_state = GPIO.HIGH
+        elif self.relay_config[relay]['config'] ==  'nc':
+            off_state =GPIO.LOW
+        else:
+            raise ValueError("proper relay config not provided, no or nc only")
+
+        return off_state      
 
     def get_control_readings(self):
         
@@ -231,7 +245,7 @@ class relay_engine():
         if not self.relay_config[relay]['last_changed']:
             self.relay_config[relay]['last_changed'] = datetime.datetime.now().strftime(timestamp_strformat)
 
-        GPIO.output(self.relay_config[relay]['pin'], self.on_state if self.relay_config[relay]['state'] else self.off_state)
+        GPIO.output(self.relay_config[relay]['pin'], self.get_on_state(relay) if self.relay_config[relay]['state'] else self.get_off_state(relay))
 
 
     def begin(self):
@@ -289,12 +303,12 @@ class relay_engine():
 if __name__ == '__main__':
 
     relay_config = {
-        "relay1":{'pin':26, 'state':False, 'last_changed': None},
-        "activeRelay":{'pin':20, 'state':False, 'last_changed': None},
-        "relay3":{'pin':21, 'state':False, 'last_changed':None},
+        "relay1":{'pin':26, 'state':False, 'config':'no', 'last_changed': None},
+        "activeRelay":{'pin':20, 'state':False, 'config':'no', 'last_changed': None},
+        "relay3":{'pin':21, 'state':False, 'config':'no', 'last_changed':None},
     }
 
-    relay_group1 = relay_engine(relay_config=relay_config, wiring = 'no', label='test_relays', api_dir='./api/', log_dir='./log/',refresh_rate=1)
+    relay_group1 = relay_engine(relay_config=relay_config, label='test_relays', api_dir='./api/', log_dir='./log/',refresh_rate=1)
 
     relay_group1.start()
 
