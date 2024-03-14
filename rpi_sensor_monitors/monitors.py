@@ -251,9 +251,14 @@ class BME680():
         self.begin()
 
         while self.status:
+            data['status'] = self.status 
             data['sensor_data'] = self.get_sensor_readings()
             push_to_api(self.api_file, data)
             time.sleep(self.refresh_rate)
+
+        data['status'] = self.status 
+        data['sensor_data'] = self.get_sensor_readings()
+        push_to_api(self.api_file, data)
 
         print(f'Stopping {self.label} thread processes in progress')
         print('Thread process ended')
@@ -381,9 +386,14 @@ class ultrasonic():
         self.begin()
 
         while self.status:
+            data['status'] = self.status 
             data['sensor_data'] = self.get_sensor_readings()
             push_to_api(self.api_file, data)
             time.sleep(self.refresh_rate)
+
+        data['status'] = self.status 
+        data['sensor_data'] = self.get_sensor_readings()
+        push_to_api(self.api_file, data)
 
         print(f'Stopping {self.label} thread processes in progress')
         GPIO.cleanup(self.trig_out_pin)
@@ -499,10 +509,14 @@ class AM2320:
         data = {'label': self.label}
 
         while self.status:
+            data['status'] = self.status 
             data['sensor_data'] = self.get_sensor_readings()
             push_to_api(self.api_file, data)
             time.sleep(self.refresh_rate)
 
+        data['status'] = self.status 
+        data['sensor_data'] = self.get_sensor_readings()
+        push_to_api(self.api_file, data)
         print(f'Stopping {self.label} thread processes in progress')
         print('Thread process ended')
 
@@ -585,9 +599,14 @@ class DualUSBCamera:
         data = {'label': self.label}
 
         while self.status:
+            data['status'] = self.status 
             data['sensor_data'] = self.capture_images()
             push_to_api(self.api_file, data)
             time.sleep(self.refresh_rate)
+        
+        data['status'] = self.status 
+        data['sensor_data'] = self.capture_images()
+        push_to_api(self.api_file, data)
 
         print(f'Stopping {self.label} thread processes in progress')
         print('Thread process ended')
