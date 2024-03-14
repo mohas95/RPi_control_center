@@ -10,4 +10,4 @@ build/
 relay_config.json
 logs/*
 api/*
-api_token.txt
+*api_token.txt
