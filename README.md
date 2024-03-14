@@ -154,6 +154,7 @@ All kinds of feedback and contributions are welcome.
 ### 0.2.3
 - Move relay controlling to controls module and simplify code
 - K30 CO2 Sensor compatability
+- add status indicators to api files
 
 ### 0.2.2 
 - add ultrasonic sensor monitor
