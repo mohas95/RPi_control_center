@@ -132,8 +132,9 @@ env_sensor.stop()
 
 ### List of Compatible Sensors
 
-- BEM680
+- BM680 (DFRobot flavor)
 - any Ultrasonic sensor
+- K30 CO2 Sensor
 
 
 ## Feedback
