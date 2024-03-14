@@ -34,6 +34,7 @@ setuptools.setup(
           'RPi.GPIO',
           'pigpio',
           'smbus',
-          'spidev'
+          'spidev',
+          'pyserial'
       ]
 )

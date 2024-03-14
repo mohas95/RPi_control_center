@@ -5,10 +5,11 @@ import time
 import os
 import os.path
 import sys
-from .gravity import DFRobot_BME680, DFRobot_BME280
+# from .gravity import DFRobot_BME680, DFRobot_BME280
 import posix
 from fcntl import ioctl
 import RPi.GPIO as GPIO
+import serial
 
 timestamp_strformat = '%Y/%m/%d %H:%M:%S'
 
@@ -595,12 +596,104 @@ class DualUSBCamera:
         self.status = False
         print(f'attempting to stop thread of {self.label}')
 
+
+class K30_CO2():
+    def __init__(self, serial_device = "/dev/ttyS0", baudrate=9600, label='k30_CO2', api_dir='./api/', log_dir='./log/', refresh_rate=1):
+
+        self.label = label
+        # self.ser = serial.Serial(serial_device, baudrate=baudrate, timeout = .5)
+        self.serial_device = serial_device
+        self.baudrate = baudrate
+        self.status = False
+        self.api_file = initiate_file(api_dir,label+".json")
+        self.log_file = initiate_file(log_dir,label+"-process.log")
+        self.refresh_rate = refresh_rate
+        self.logger = None
+        self.thread = None
+        self.sensor_readings = None
+
+    def set_thread(func):
+        """Decorator Function in order to set the thread property of the object to the output of a function returning  a thread object"""
+        def wrapper(self):
+            self.thread = func(self)
+            print(f'thread object for {self.label} set as {self.thread}')
+            return self.thread
+        return wrapper
+
+
+    def get_sensor_readings(self):
+
+        try:
+            with serial.Serial(self.serial_device, self.baudrate, timeout=5) as ser:
+
+                ser.flushInput()
+                ser.write(b'\xFE\x44\x00\x08\x02\x9F\x25')
+                time.sleep(.5)
+                resp = ser.read(7)
+                high = resp[3]
+                low = resp[4]
+                co2 =  (high*256) +low
+            
+                self.sensor_readings = { "CO2_ppm":co2,
+                                        "timestamp": datetime.datetime.now().strftime(timestamp_strformat)
+                                    }
+
+            return self.sensor_readings
+        except:
+            print(f'error getting {self.label} readings')
+            return None
+
+    def begin(self):
+
+        print(f"{self.label} setup completed, initialized")
+
+    @set_thread
+    @threaded
+    def start(self):
+        
+        self.status = True
+        self.begin()            
+
+        print(f'Starting {self.label} process')
+        data = {'label': self.label}
+
+        while self.status:
+            data['status'] = self.status 
+            data['sensor_data'] = self.get_sensor_readings()
+            
+            push_to_api(self.api_file, data)
+            time.sleep(self.refresh_rate)
+        
+        print(f'Stopping {self.label} thread processes in progress')
+        
+        data['status'] = self.status 
+        data['sensor_data'] = self.get_sensor_readings()
+        push_to_api(self.api_file, data)
+        
+        print('Thread process ended')
+
+
+    def stop(self):
+        self.status = False
+        print(f'attempting to stop thread of {self.label}')
+
+
+
 if __name__ == '__main__':
 
-    water_level = ultrasonic(26,19)
-    water_level.start()
-    time.sleep(60)
-    water_level.stop()
+    co2_sensor = K30_CO2(serial_device = "/dev/ttyS0", baudrate=9600, label='k30_CO2', api_dir='./api/', log_dir='./log/', refresh_rate=1)
+    co2_sensor.start()
+
+    try:
+        while True:
+            time.sleep(5)
+    except:
+        co2_sensor.stop()
+
+    # water_level = ultrasonic(26,19)
+    # water_level.start()
+    # time.sleep(60)
+    # water_level.stop()
     
 
 
