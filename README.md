@@ -99,6 +99,21 @@ print(test_csv.total_size)
 ```
 
 ### Sensor Monitoring scripts
+
+#### K30 CO2 Sensor (Serial)
+```python
+from rpi_sensor_monitors import monitors
+
+co2_sensor = monitors.K30_CO2(serial_device = "/dev/ttyS0", baudrate=9600, label='k30_CO2', api_dir='./api/', log_dir='./log/', refresh_rate=1)
+co2_sensor.start()
+
+try:
+    while True:
+        time.sleep(5)
+except:
+    co2_sensor.stop()
+```
+#### BME680 Sensor
 ```python
 from rpi_sensor_monitors import monitors
 
@@ -137,7 +152,7 @@ All kinds of feedback and contributions are welcome.
 ## Change Log
 ### 0.2.3
 - Move relay controlling to controls module and simplify code
-- CO2 Sensor compatability
+- K30 CO2 Sensor compatability
 
 ### 0.2.2 
 - add ultrasonic sensor monitor
