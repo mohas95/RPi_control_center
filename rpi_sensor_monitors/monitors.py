@@ -5,7 +5,7 @@ import time
 import os
 import os.path
 import sys
-# from .gravity import DFRobot_BME680, DFRobot_BME280
+from .gravity import DFRobot_BME680, DFRobot_BME280
 import posix
 from fcntl import ioctl
 import RPi.GPIO as GPIO
@@ -682,13 +682,16 @@ class K30_CO2():
 if __name__ == '__main__':
 
     co2_sensor = K30_CO2(serial_device = "/dev/ttyS0", baudrate=9600, label='k30_CO2', api_dir='./api/', log_dir='./log/', refresh_rate=1)
+    temp_sensor = BME680()
     co2_sensor.start()
+    temp_sensor.start()
 
     try:
         while True:
             time.sleep(5)
     except:
         co2_sensor.stop()
+        temp_sensor.stop()
 
     # water_level = ultrasonic(26,19)
     # water_level.start()
